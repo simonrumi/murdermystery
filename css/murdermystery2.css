@@ -1,0 +1,79 @@
+#main_content {
+	width: 900px;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+table {
+	border: none;
+}
+
+tr {
+	border: none;
+}
+
+td {
+	border: none;
+	width: 200px;
+	border-radius: 5px 5px 5px 5px;
+	padding: 5px;
+}
+
+.visible {
+	visibility: visible;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.clickableHeader {
+	cursor: pointer;
+}
+
+.headerColumn {
+	/* height: 80px; */
+}
+
+
+
+.suspect {
+	background-color: #EBD3D4; /* light redish grey */
+	border: 1px solid #FFFFFF;
+}
+
+
+.victim {
+	border: 4px solid #E00008; /*red */
+	font-weight: bold;
+}
+
+
+.murderer {
+	border: 4px solid #1C090A; /* redish black */
+	font-weight: bold;
+}
+
+
+.married {
+	background-color: #E09FA1; /* neutral light reddish */
+	color: #000000;
+}
+
+
+.affair {
+	background-color: #D15458; /* light red-ish */
+	color: #000000;
+}
+
+
+.blackmail {
+	background-color: #423334; /* dark de-saturated red */
+	color: #FFFFFF;
+}
+
+
+.inheritance {
+	background-color: #822A2D; /* medium red */
+	color: #FFFFFF;
+}
