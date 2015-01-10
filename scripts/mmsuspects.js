@@ -44,7 +44,7 @@ function Suspect(name) {
 * A SuspectCollection contains an array of Suspects for the game
 * It knows which Suspect is the victim and which is the murderer
 */
-var suspectCollection = (function() {
+function SuspectCollection() {
 	
 	/****************************
 	* private vairables
@@ -76,7 +76,6 @@ var suspectCollection = (function() {
 		relationshipCollections.inheritances = RelationshipCollection( RelationshipType('inheritance', false, ' is leaving money to ', InheritanceRelationshipCalculator() ) );
 	}
 	
-// QQQQQ for some reason the Closure tab in Chrome doesn't show resetRelationshipCollections....can it be run??? what's up???	
 	/*
 	* resetRelationshipCollections
 	* clear out the arrays of Relationships within the RelationshipCollections
@@ -210,4 +209,4 @@ var suspectCollection = (function() {
 		
 	} // end return of public methods
 	
-})();
+};
