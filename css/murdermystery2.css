@@ -19,6 +19,10 @@ td {
 	padding: 5px;
 }
 
+*:focus {
+	outline: none;
+}
+
 .visible {
 	visibility: visible;
 }
@@ -35,7 +39,11 @@ td {
 	/* height: 80px; */
 }
 
-
+.unknownRelationship {
+	height: 80px;
+	background-color: #EBDFDF;
+	/*cursor: pointer;*/
+}
 
 .suspect {
 	background-color: #EBD3D4; /* light redish grey */
@@ -77,3 +85,72 @@ td {
 	background-color: #822A2D; /* medium red */
 	color: #FFFFFF;
 }
+
+.popUpDialog {
+	border: none;
+	border-radius: 10px;
+	background-color: #ffffff;
+	cursor: pointer;
+	padding: 5px;
+}
+
+/*colorbox hierarchy for reference */
+
+/*#cboxOverlay {}
+
+#colorbox {}
+
+	#cboxWrapper {}
+		
+		<div>
+			#cboxTopLeft {}
+			
+			#cboxTopCenter {}
+			
+			#cboxTopRight {}
+		</div>
+		
+		<div clear left>
+		#cboxMiddleLeft {}
+		
+		#cboxContent{}
+		
+			#cboxLoadedContent{}
+			
+			#cboxTitle{}
+			
+			#cboxCurrent{}
+			
+			#cboxPrevious{}
+			
+			#cboxNext{}
+			
+			#cboxSlideshow{}
+			
+			#cboxLoadingOverlay{}
+			
+			#cboxLoadingGraphic{}
+			
+			#cboxClose{}
+			
+		#cboxMiddleRight{}
+		</div>
+		<div clear left>
+			#cboxBottomLeft{}
+			
+			#cboxBottomCenter{}
+			
+			#cboxBottomRight{}
+		</div>*/
+		
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+		

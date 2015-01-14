@@ -6,6 +6,7 @@
 		
 		<!-- 3rd party scripts -->
 		<script src="scripts/jquery-2.1.1.js"></script>
+		<script src="scripts/jquery.colorbox-min.js"></script>
 		
 		<!-- our scripts -->
 		<script style="text/javascript" src="scripts/mmarrays.js"></script>
@@ -32,6 +33,25 @@
 				<button type="button" id="showAllBtn">Show all relationships</button>
 				<button type="button" id="showMurdererBtn">Reveal the murderer!</button>
 			</div>
+			
+			
+			<!-- This contains the hidden content for inline calls -->
+			<div style='display:none'>  
+				<div id='relationshipdisplay'>
+					<table>
+						<tbody>
+							<tr>
+								<td id="popUpDialogImage1"><img class="suspectimg" src="img/BarackObama.jpg" width="300px"></td>
+								<td id="popUpDialogImage2"><img class="suspectimg" src="img/BarackObama.jpg" width="300px"></td>
+							</tr>
+							<tr>
+								<td id="popUpDialogText" colspan="2"></td>
+							</tr>
+						</tbody>
+					</table>	
+				</div>
+			</div>
+			
 		</div>
 		
 	</body>

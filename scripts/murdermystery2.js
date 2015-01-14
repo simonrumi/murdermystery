@@ -22,8 +22,28 @@ var testing = false;
 var MMVars = {
 	SuspectNames : ['Barak Obama','Jet Li','David Bowie','Gwen Stefani','Marie Curie','Jane Austen','Taylor Swift','Liam Neeson'],
 	
+	SuspectImages : ['img/BarackObama.jpg','img/JetLi.jpg','img/DavidBowie.jpg','img/GwenStefani.jpg','img/MarieCurie.jpg','img/JaneAusten.jpg','img/TaylorSwift.jpg','img/LiamNeeson.jpg'],
+	
 	//the minimum number of Relationships (between Suspects) in a game - use this for game balancing
 	MINIMUM_RELATIONSHIPS : 7,
+}
+
+
+/*
+* postJQueryCallback
+* used for executing callbacks after jQuery updates. For use something like this:
+*
+* 	$.colorbox({html: '<p>added paragraph</p>'}).postJQueryCallback(function () {
+*		//after the colorbox is updated, set the bg color of the cboxContent div
+		$('#cboxContent').css("background-color","#ffffff");
+*	});
+* 
+*/	
+jQuery.fn.postJQueryCallback = function (callback) {
+	if (callback) {
+		callback();
+	}
+	return this;
 }
 
 
@@ -62,8 +82,15 @@ var gameController = (function() {
 	/********************
 	* private methods
 	*********************/
+	var additionalColorboxFormatting;
 	
-	
+	additionalColorboxFormatting = function () {
+		// close the colorbox when the user clicks on it anywhere
+		$('#cboxContent').click( function() { $.colorbox.close(); } );
+		
+		//after the colorbox is updated, set the style of the #cboxContent div that contains the majority of the 
+		$('#cboxContent').addClass('popUpDialog');
+	}
 		
 	/********************
 	* public methods
@@ -148,6 +175,10 @@ var gameController = (function() {
 				//then make additional columns, one for each suspect in the suspectsList
 				for (j in suspectsList) {
 					$('#suspects').find('tr:last').append( $('<td></td>') );
+					$('#suspects').find('tr:last td:last').addClass('unknownRelationship');
+					// add an attribute indicating the id of this Suspect in the suspectsList
+					$('#suspects').find('tr:last td:last').attr('data-recipientid',i);
+					$('#suspects').find('tr:last td:last').attr('data-instigatorid',j);
 				}
 			}	
 		}, // end createHeaderRowAndColumn
@@ -245,15 +276,70 @@ var gameController = (function() {
 				j = relationshipCoordinates[randomRelationship][1];
 				relationshipToReveal = rCollections[i].getRelationships()[j];
 				if ( rCollections[i].getRelationshipType().revealRelationshipUnderQuestioning() ) {
-					relationshipToReveal.makeVisible();
+					relationshipToReveal.makeVisible(additionalColorboxFormatting);
 				} else {
-					alert('Suspect is evading the question');
+					$.colorbox({
+						html: '<p>Suspect ' + suspectsList[suspectid].name + ' is evading the question</p>', 
+						closeButton: false
+					}).postJQueryCallback( additionalColorboxFormatting );
 				}
 			} else {
-				//TODO: display something cooler than an alert dialog
-				alert('Sorry - no relationships to reveal');
+				$.colorbox({
+					html: '<p> Suspect ' + suspectsList[suspectid].name + ' has no relationships to reveal</p>',
+					closeButton: false 
+				}).postJQueryCallback( additionalColorboxFormatting );
 			}
+			
+			// might want to put this in some other place
+			//$('#cboxContent').css("background-color","#ffffff");
 		}, // end questionSuspect
+		
+		
+		// when one of the cells for the Relationships is clicked a Relationship that involves the 2 Suspects given by the grid location might be shown
+		questionRelationship : function(evt) {   
+			var clickedElement = $(evt.target);	
+	    	var instigatorId = $(clickedElement).attr('data-instigatorid');
+	    	var recipientId = $(clickedElement).attr('data-recipientid');
+	    	var i;
+	    	var j;
+	    	var randomRelationship = [];
+	    	var instigatorsPossibleRelationships = [];
+	    	var recipientsPossibleRelationships = [];
+	    	var allPossibleRelationships = [];
+	  
+	  		// user clikced on a cell representing a relationship with a particular Suspect as instigator and a particular Suspect as recipient
+	  		// so look for all the relationships with that pairing
+	  		instigatorsPossibleRelationships = suspectCollection.findRelationshipsForSuspect( suspectsList[instigatorId] );
+	  		for (i in instigatorsPossibleRelationships) {
+	  			if ( (instigatorsPossibleRelationships[i].instigator == suspectsList[instigatorId]) && (instigatorsPossibleRelationships[i].recipient == suspectsList[recipientId]) ) {
+	  				allPossibleRelationships.push( instigatorsPossibleRelationships[i] );
+	  			}
+	  		}
+	  		
+	  		recipientsPossibleRelationships = suspectCollection.findRelationshipsForSuspect( suspectsList[recipientId] );
+	  		for (i in recipientsPossibleRelationships) {
+	  			if ( (recipientsPossibleRelationships[i].recipient == suspectsList[recipientId]) && (recipientsPossibleRelationships[i].instigator == suspectsList[instigatorId]) ) {
+	  				allPossibleRelationships.push( recipientsPossibleRelationships[i] );
+	  			}
+	  		}
+	  		
+	    	if (allPossibleRelationships.length > 0) {
+	    		randomRelationship = getRandomIndex(allPossibleRelationships);
+	    		if ( allPossibleRelationships[randomRelationship].relationshipType.revealRelationshipUnderQuestioning() ) {
+	    			allPossibleRelationships[randomRelationship].makeVisible(additionalColorboxFormatting);
+	    		} else {
+					$.colorbox({
+						html: '<p class="evading">Suspect ' + suspectsList[instigatorId].name + ' is evading the question</p>', 
+						closeButton: false 
+					}).postJQueryCallback( additionalColorboxFormatting );
+				}
+			} else {
+				$.colorbox({
+					html: '<p> Suspect ' + suspectsList[instigatorId].name + ' has no relationships to reveal</p>',
+					closeButton: false
+				}).postJQueryCallback( additionalColorboxFormatting );
+			}
+		}, // end questionRelationship
 
 		
 	} //end return object from gameController
@@ -305,5 +391,8 @@ $(document).ready(function() {
     
     // when one of the Suspect names is clicked, it is representing questioning that suspect. A Relationship that the Suspect is involved in might be shown
     $('.clickableHeader').click( gameController.questionSuspect );	
+    
+    // was going to have the grid with the Relationships clickable, but decided against it, for now
+    //$('.unknownRelationship').click( gameController.questionRelationship );
 	
 });

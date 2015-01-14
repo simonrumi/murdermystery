@@ -19,7 +19,7 @@ function RelationshipType(name, directional, phrase, relationshipCalculator) {
 		phrase : _phrase,
 		
 		assignRandomRelationships : function (suspectCollection) {
-			return _relationshipCalculator.assignRandomRelationships(suspectCollection);
+			return _relationshipCalculator.assignRandomRelationships(suspectCollection,this);
 		},
 		
 		findEnemies : function (victim, suspectCollection) {
@@ -37,11 +37,14 @@ function RelationshipType(name, directional, phrase, relationshipCalculator) {
 * Relationship
 * @instigator - one of the Suspects in the Relationship, if applicable, this is the Suspect doing/giving something to the recipient
 * @recipient - the other Suspect in the Relationship, if applicable this is the Suspect that is the object of the instigor's action
+* @rType - the RelationshipType of this Relationship. TODO: this is new, so now both the Relationship and the RelationshipCollection refer to RelationshipType. 
+* Need to refactor to just have RelationshipType referenced in Relationship
 */
-function Relationship(instigator, recipient) {	
-	
+function Relationship(instigator, recipient, rType) {	
+	// private variables star here
 	var _instigator = instigator;
 	var _recipient = recipient;
+	var _rType = rType;
 	
 	 //whether or not this relationship is visible in the webpage
 	var _visible = false;
@@ -49,9 +52,11 @@ function Relationship(instigator, recipient) {
 	// a string for use by jQuery: where to find this relationship in the web page's table
 	var _tdLocatorPhrase;
 	
+	//public variables & methods start here
 	return {
 		instigator : _instigator,
 		recipient : _recipient,
+		relationshipType : _rType,
 		
 		/*
 		* isVisible
@@ -82,15 +87,30 @@ function Relationship(instigator, recipient) {
 		* - a css class called visible
 		* - tdLocatorPhrase specifying a place to find this Relationship on the webpage
 		*/
-		makeVisible : function () {
+		makeVisible : function (callback) {
 			if (_tdLocatorPhrase) {
 				$(_tdLocatorPhrase).removeClass('invisible');
-				$(_tdLocatorPhrase).addClass('visible');
+				$(_tdLocatorPhrase).addClass('visible');			
 				$(_tdLocatorPhrase).show(1000);
 				_visible = true;
+				
+				//configure the popUpDialog
+				$('#popUpDialogImage1').html('<img class="suspectimg" src="' + _instigator.img + '" width="300px">');
+				$('#popUpDialogImage2').html('<img class="suspectimg" src="' + _recipient.img + '" width="300px">');
+				$('#popUpDialogText').html('<p>' + _instigator.name + _rType.phrase + _recipient.name + '</p>');
+				
+				// now display the popUpDialog using colorbox
+				$.colorbox({
+					html: $('#relationshipdisplay').html(),
+					width: '650px',
+					height: '400px',
+					closeButton: false
+				}).postJQueryCallback( callback );
+				
 			} else {
 				throw 'could not make Relationship between ' + _instigator + ' and ' + _recipient + ' visible because there was no tdLocatorPhrase';
 			}
+			
 		},
 		
 		
@@ -228,7 +248,7 @@ function RelationshipCalculatorInterface() {
 	
 	return {
 		//go thru the suspectsArray and randomly assign relationships, returning an array of those Relationships
-		assignRandomRelationships : function(suspectCollection) {
+		assignRandomRelationships : function(suspectCollection,relationshipType) {
 			return [];
 		},
 		
@@ -261,7 +281,7 @@ function MarriageRelationshipCalculator() {
 		* @param suspectCollection - the SuspectCollection for this game
 		* @return - an array of Relationships
 		*/
-		assignRandomRelationships : function(suspectCollection) {
+		assignRandomRelationships : function(suspectCollection,relationshipType) {
 			log('assigning random marriages');
 			
 			var suspectsArray = suspectCollection.getSuspectsArray();
@@ -286,7 +306,7 @@ function MarriageRelationshipCalculator() {
 					//remove the spouse from the remaining suspects as the currentSuspect and his/her spouse both can't be married to anyone else
 					remainingSuspects.splice(spouseIndex,1);
 					
-					marriages.push( Relationship(currentSuspect,spouse) );
+					marriages.push( Relationship(currentSuspect,spouse,relationshipType) );
 					log('assignRandomMarriages: ' + currentSuspect.name + ' is now married to ' + spouse.name);
 					
 				} //end if generateRandomBool()
@@ -331,7 +351,7 @@ function AffairRelationshipCalculator() {
 		* @param suspectCollection - the SuspectCollection for this game
 		* @return - an array of Relationships
 		*/
-		assignRandomRelationships : function(suspectCollection) {
+		assignRandomRelationships : function(suspectCollection,relationshipType) {
 			log('assigning random affairs');
 			
 			var suspectsArray = suspectCollection.getSuspectsArray();
@@ -355,7 +375,7 @@ function AffairRelationshipCalculator() {
 				if( generateRandomBool() ) {
 					//we're assigning an affair to the currentSuspect, so randomly choose a lover from the otherSuspects list
 					randomLoverIndex = getRandomIndex(otherSuspects);
-					affairs.push( Relationship(currentSuspect, otherSuspects[randomLoverIndex]) );
+					affairs.push( Relationship(currentSuspect, otherSuspects[randomLoverIndex],relationshipType) );
 					
 					log('assignRandomAffairs: ' + currentSuspect.name + ' is having an affair with ' + (otherSuspects[randomLoverIndex]).name);
 					
@@ -366,7 +386,7 @@ function AffairRelationshipCalculator() {
 				if( generateRandomBool() ) {
 					//we're assigning an affair to the currentSpouse, so randomly choose a lover from the otherSuspects list
 					randomLoverIndex = getRandomIndex(otherSuspects);
-					affairs.push( Relationship(currentSpouse, otherSuspects[randomLoverIndex]) );
+					affairs.push( Relationship(currentSpouse, otherSuspects[randomLoverIndex],relationshipType) );
 					
 					log('assignRandomAffairs: ' + currentSpouse.name + ' is having an affair with ' + (otherSuspects[randomLoverIndex]).name);
 				}
@@ -433,7 +453,7 @@ function BlackmailRelationshipCalculator() {
 		* @param suspectCollection - the SuspectCollection for this game
 		* @return - an array of Relationships
 		*/
-		assignRandomRelationships : function(suspectCollection) {
+		assignRandomRelationships : function(suspectCollection,relationshipType) {
 			log('assigning random blackmails');
 			
 			var suspectsArray = suspectCollection.getSuspectsArray();
@@ -507,7 +527,7 @@ function BlackmailRelationshipCalculator() {
 					// if there is anyone left to be a blackmailer, then randomly pick one:
 					if (potentialBlackmailers.length > 0) {
 						randomBlackmailerIndex = getRandomIndex(potentialBlackmailers);
-						blackmailers.push( Relationship(potentialBlackmailers[randomBlackmailerIndex], currentSuspect) );
+						blackmailers.push( Relationship(potentialBlackmailers[randomBlackmailerIndex], currentSuspect, relationshipType) );
 						
 						log('assigning random blackmailer: ' + potentialBlackmailers[randomBlackmailerIndex].name + ' is blackmailing ' + currentSuspect.name);
 					}
@@ -563,7 +583,7 @@ function InheritanceRelationshipCalculator() {
 		* @param suspectCollection - the SuspectCollection for this game
 		* @return - an array of Relationships
 		*/
-		assignRandomRelationships : function(suspectCollection) {
+		assignRandomRelationships : function(suspectCollection,relationshipType) {
 			log('assigning random inheritances');
 			
 			var suspectsArray = suspectCollection.getSuspectsArray();
@@ -580,7 +600,7 @@ function InheritanceRelationshipCalculator() {
 					otherSuspects = removeFromArray(suspectsArray[i], otherSuspects);
 					inheritorIndex = getRandomIndex(otherSuspects);
 					
-					inheritances.push( Relationship(suspectsArray[i], otherSuspects[inheritorIndex]) );
+					inheritances.push( Relationship(suspectsArray[i], otherSuspects[inheritorIndex], relationshipType) );
 					log('assigning random inheritance: ' + suspectsArray[i].name + ' is leaving money to ' + otherSuspects[inheritorIndex].name);
 				}
 			}

@@ -4,14 +4,15 @@
 * A Suspect is a character in the game
 * @name - the suspect's name
 */
-function Suspect(name) {
+function Suspect(name,img) {
 	var _name = name;
+	var _img = img;
 	var _rowTdLocatorPhrase;
 	var _columnTdLocatorPhrase;
 	
 	return {
 		name : _name,
-		
+		img : _img,
 		/*
 		* rowTdLocatorPhrase
 		* @param - (optional) a jQuery string used to locate the the cell this Suspect is displayed in, within the header row along the top of the table 
@@ -68,6 +69,7 @@ function SuspectCollection() {
 	/*
 	* initializeRelationshipCollections
 	* there are a fixed set of RelationshipCollections that are defined here
+	* for future expansion, the RelationshipTypes could go in some kind of JSON config file
 	*/
 	initializeRelationshipCollections = function () {		
 		relationshipCollections.marriages = RelationshipCollection( RelationshipType('married', false, ' is married to ', MarriageRelationshipCalculator() ) );
@@ -126,11 +128,12 @@ function SuspectCollection() {
 		
 		initializeSuspects : function (nameList) {	
 			var i;
+			var imgList = MMVars.SuspectImages; //temp way for getting images
 			if (!nameList) {
 				nameList = MMVars.SuspectNames;
 			}
 			for (i in nameList) {
-				suspectsArray.push( Suspect(nameList[i]) );
+				suspectsArray.push( Suspect(nameList[i],MMVars.SuspectImages[i]) );
 			}
 		},
 		
@@ -203,7 +206,8 @@ function SuspectCollection() {
 						addToArray(relationshipCollections[i].getRelationships()[j], suspectRelationships);
 					}
 				}
-			}	
+			}
+			return suspectRelationships;	
 		},
 		
 		
