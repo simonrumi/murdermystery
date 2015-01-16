@@ -71,32 +71,97 @@ var gameController = (function() {
 	var victimHasEnemies;
 	var suspectsList;
 	var rCollections;
-	var i;
-	var j;
-	var row;
-	var column;
-	var tdLocatorPhrase;
-	var position;
-	var murderer;
 	
 	/********************
 	* private methods
 	*********************/
 	var additionalColorboxFormatting;
+	var displaySuspectHeader;
+	var displaySuspectRows;
 	
 	additionalColorboxFormatting = function () {
 		// close the colorbox when the user clicks on it anywhere
 		$('#cboxContent').click( function() { $.colorbox.close(); } );
 		
-		//after the colorbox is updated, set the style of the #cboxContent div that contains the majority of the 
+		//after the colorbox is updated, set the style of the #cboxContent div
 		$('#cboxContent').addClass('popUpDialog');
 	}
 		
+	
+	displaySuspectHeader = function () {
+		var i;
+		var j;
+		var row;
+		var column;
+		var tdLocatorPhrase;
+		
+		// first make the row along the top with the first cell blank, since that blank cell will be the top of the column where the vertical suspect names are put
+		$('#suspects').append( $('<tr></tr>').append( $('<td></td>') ) );
+		
+		// next iterate through the suspects and enter them in the next cells in the top row		
+		for (i in suspectsList) {
+			$('#suspects').find('tr:last').append( $('<td></td>').text(suspectsList[i].name) );
+			
+			column = i;
+			column++;
+			tdLocatorPhrase = '#suspects > tbody > tr:eq(0) > td:eq(' + column + ')';
+			$(tdLocatorPhrase).addClass('suspect');
+			
+			// add the clickableHeader class
+			$(tdLocatorPhrase).addClass('clickableHeader');
+			
+			// add an attribute indicating the id of this Suspect in the suspectsList
+			$(tdLocatorPhrase).attr('data-recipientid',i);
+			
+			// if the suspect is the victim, add the victim class
+			if ( suspectsList[i] == suspectCollection.getVictim() ) {;
+				$(tdLocatorPhrase).addClass('victim');
+			}
+			
+			suspectsList[i].rowTdLocatorPhrase(tdLocatorPhrase);
+		}
+	}
+	
+	/*
+	* displaySuspectRows - display a series of blank rows, one for each suspect, each row to be the length of the number of suspects, 
+	* plus one for the column containing the suspects' names
+	*/
+	displaySuspectRows = function () {
+		var i;
+		var j;
+		
+		// 
+		for (i in suspectsList) {
+			//first make the row with the first column containing the current suspect's name
+			$('#suspects').append( $('<tr></tr>').append( $('<td></td>').text(suspectsList[i].name) ) );
+			$('#suspects').find('tr:last td:last').addClass('suspect');
+			$('#suspects').find('tr:last td:last').addClass('headerColumn');
+			
+			// add the clickableHeader class
+			$('#suspects').find('tr:last td:last').addClass('clickableHeader');
+			
+			// add an attribute indicating the id of this Suspect in the suspectsLis
+			$('#suspects').find('tr:last td:last').attr('data-instigatorid',i);
+			
+			//then make additional columns, one for each suspect in the suspectsList
+			for (j in suspectsList) {
+				$('#suspects').find('tr:last').append( $('<td></td>') );
+				$('#suspects').find('tr:last td:last').addClass('unknownRelationship');
+				// add an attribute indicating the id of this Suspect in the suspectsList
+				$('#suspects').find('tr:last td:last').attr('data-recipientid',i);
+				$('#suspects').find('tr:last td:last').attr('data-instigatorid',j);
+			}
+		}	
+	}
+	
 	/********************
 	* public methods
 	*********************/
 	return {
 		
+		/*
+		* init - initialize the game: creates the Suspects list and their randomized Relationships, then assigns a Victim and a Murderer
+		*/
 		init : function() {
 			victimHasEnemies = false;
 			suspectCollection = SuspectCollection();
@@ -127,64 +192,33 @@ var gameController = (function() {
 				
 		}, //end init
 		
+		/*
+		* clearTable - erase the display of all suspects
+		*/
 		clearTable : function() {
 			$('#suspects').empty();
 		},
 		
-		
-		createGameBoard : function() {
-			// first make the row along the top with the first cell blank, since that blank cell will be the top of the column where the vertical suspect names are put
-			$('#suspects').append( $('<tr></tr>').append( $('<td></td>') ) );
+		/*
+		* createGameBoard - display the new, blank game board
+		*/
+		createGameBoard : function() {	
+			displaySuspectHeader();		
+			displaySuspectRows();
 			
-			// next iterate through the suspects and enter them in the next cells in the top row		
-			for (i in suspectsList) {
-				$('#suspects').find('tr:last').append( $('<td></td>').text(suspectsList[i].name) );
-				
-				column = i;
-				column++;
-				tdLocatorPhrase = '#suspects > tbody > tr:eq(0) > td:eq(' + column + ')';
-				$(tdLocatorPhrase).addClass('suspect');
-				
-				// add the clickableHeader class
-				$(tdLocatorPhrase).addClass('clickableHeader');
-				
-				// add an attribute indicating the id of this Suspect in the suspectsList
-				$(tdLocatorPhrase).attr('data-recipientid',i);
-				
-				// if the suspect is the victim, add the victim class
-				if ( suspectsList[i] == suspectCollection.getVictim() ) {;
-					$(tdLocatorPhrase).addClass('victim');
-				}
-				
-				suspectsList[i].rowTdLocatorPhrase(tdLocatorPhrase);
-			}
-			
-			// now fill out a series of blank rows, one for each suspect, each row to be the length of the number of suspects, plus one for the column containing the suspects' names
-			for (i in suspectsList) {
-				//first make the row with the first column containing the current suspect's name
-				$('#suspects').append( $('<tr></tr>').append( $('<td></td>').text(suspectsList[i].name) ) );
-				$('#suspects').find('tr:last td:last').addClass('suspect');
-				$('#suspects').find('tr:last td:last').addClass('headerColumn');
-				
-				// add the clickableHeader class
-				$('#suspects').find('tr:last td:last').addClass('clickableHeader');
-				
-				// add an attribute indicating the id of this Suspect in the suspectsLis
-				$('#suspects').find('tr:last td:last').attr('data-instigatorid',i);
-				
-				//then make additional columns, one for each suspect in the suspectsList
-				for (j in suspectsList) {
-					$('#suspects').find('tr:last').append( $('<td></td>') );
-					$('#suspects').find('tr:last td:last').addClass('unknownRelationship');
-					// add an attribute indicating the id of this Suspect in the suspectsList
-					$('#suspects').find('tr:last td:last').attr('data-recipientid',i);
-					$('#suspects').find('tr:last td:last').attr('data-instigatorid',j);
-				}
-			}	
-		}, // end createHeaderRowAndColumn
+		}, // end createGameBoard
 		
-		
+		/*
+		* populateGameBoard - put the Relationships between the Suspects into the game board, albeit hidden initially
+		*/
 		populateGameBoard : function() {
+			var i;
+			var j;
+			var row;
+			var column;
+			var tdLocatorPhrase;
+			var position;
+			
 			// go through all the Relationships and put them in the appropriate cells in the table
 			// specifically we are placing the relationship in the row of the instigator and the column of the recipient
 			for (i in rCollections) {
@@ -235,7 +269,9 @@ var gameController = (function() {
 		}, // end populateGameBoard
 		
 		
-		// when one of the Suspect names is clicked, it is representing questioning that suspect. A Relationship that the Suspect is involved in might be shown
+		/*
+		* when one of the Suspect names is clicked, it is representing questioning that suspect. A Relationship that the Suspect is involved in might be shown
+		*/
 		questionSuspect : function(evt) {   
 			var clickedElement = $(evt.target);	
 	    	var suspectid;
@@ -295,7 +331,10 @@ var gameController = (function() {
 		}, // end questionSuspect
 		
 		
-		// when one of the cells for the Relationships is clicked a Relationship that involves the 2 Suspects given by the grid location might be shown
+		/*
+		* questionRelationship - when one of the cells for the Relationships is clicked a Relationship that involves the 2 Suspects given by the grid location might be shown
+		* might not use this after all
+		*/
 		questionRelationship : function(evt) {   
 			var clickedElement = $(evt.target);	
 	    	var instigatorId = $(clickedElement).attr('data-instigatorid');
