@@ -1,6 +1,7 @@
 'use strict';
 
 /*
+* RelationshipType - there are just a few of these; each one describes a kind of relationship, such as a marriage, an affair, blackmail etc
 * @name - the name of the relationship type, which is also used as a class name in the css  
 * @directional - if true, the instigator of the relationship does something to the recipient (such as instigator leaves inheritance to the recipient),
 * if false then the relationship is mutual, e.g. a marriage 
@@ -218,17 +219,6 @@ function RelationshipView() {
 				width: 5
 			});
 			
-			// old system of having relationships as nodes (looked too messy):
-			// add a new node to descibe the relationship itself
-			// visObject.visNodes.add( {id: visObject.nextVisId, label: instigator.name + rType.phrase + recipient.name} );
-			
-			// add new edges
-			// visObject.visEdges.add( {from: instigator.id, to: visObject.nextVisId} );
-			// visObject.visEdges.add( {from: visObject.nextVisId, to: recipient.id} );
-			
-			// increment the next available id for the next time we add a node
-			// ++visObject.nextVisId; 
-			
 			visObject.visData = {
 				nodes: visObject.visNodes,
 				edges: visObject.visEdges,
@@ -243,11 +233,12 @@ function RelationshipView() {
 		
 		
 		/*
-		* makeInvisible - makes the display of this Relationship on the webpage visible
+		* makeInvisible - makes the display of this Relationship on the webpage visible.
 		* relies on 
 		* - a css class called invisible
 		* - a css class called visible
-		* - tdLocatorPhrase specifying a place to find this Relationship on the webpage
+		* - jQueryLocatorPhrase specifying a place to find this Relationship on the webpage
+		* TODO - this isn't currently used, but if it is needed, then it needs to update the vis stuff as well as the grid of relationships
 		*/
 		makeInvisible : function () {
 			if (_jQueryLocatorPhrase) {

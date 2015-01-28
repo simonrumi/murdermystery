@@ -30,7 +30,7 @@ function Suspect(id,name,img) {
 		},
 		
 		/*
-		* TODO this might be unused now
+		* TODO this might be unused now...probably get rid of this
 		* columnTdLocatorPhrase
 		* @param - (optional) a jQuery string used to locate the the cell this Suspect is displayed in
 		* if given, the columnTdLocatorPhrase is set, if not given, it is returned
