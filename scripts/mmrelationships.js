@@ -193,17 +193,30 @@ function RelationshipView() {
 			}
 			
 			// vis stuff starts here
-			// add new nodes, if needed, for the recipient and instigator
+			// add new nodes, if needed, for the recipient and instigator, colored the same as the background color of the header row
 			if ( !visObject.visNodes._getItem(instigator.id) ) {
-				visObject.visNodes.add( {id: instigator.id, label: instigator.name} );
+				visObject.visNodes.add({
+					id: instigator.id, 
+					label: instigator.name,
+					color: $(recipient.headerLocatorPhrase()).css('background-color')
+				});
 			}
 			
 			if ( !visObject.visNodes._getItem(recipient.id) ) {
-				visObject.visNodes.add( {id: recipient.id, label: recipient.name} );
+				visObject.visNodes.add({
+					id: recipient.id, 
+					label: recipient.name,
+					color: $(recipient.headerLocatorPhrase()).css('background-color')
+				});
 			}
 			
-			// add an edge between the recipient and instigator
-			visObject.visEdges.add( {from: instigator.id, to: recipient.id} );
+			// add an edge between the recipient and instigator colored the same as the css class for type of relationship this is
+			visObject.visEdges.add({
+				from: instigator.id, 
+				to: recipient.id, 
+				color: $('#relationshipdisplay > table').css("background-color"),
+				width: 5
+			});
 			
 			// old system of having relationships as nodes (looked too messy):
 			// add a new node to descibe the relationship itself

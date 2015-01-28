@@ -145,7 +145,7 @@ var gameController = (function() {
 				$(jQueryLocatorPhrase).addClass('victim');
 			}
 			
-			suspectsList[i].rowTdLocatorPhrase(jQueryLocatorPhrase);
+			suspectsList[i].headerLocatorPhrase(jQueryLocatorPhrase);
 		}
 	}
 	
@@ -251,6 +251,7 @@ var gameController = (function() {
 			var j;
 			var row;
 			var column;
+			var temp;
 			var jQueryLocatorPhrase;
 			var position;
 			
@@ -262,6 +263,14 @@ var gameController = (function() {
 					
 					column = suspectsList.indexOf( rCollections[i].getRelationshipControllers()[j].recipient );
 					column++; // increment the column number to account for the first column with the suspect names
+					
+					// to place the relationsip in the upper right triangle of the grid (and not in the lower left triangle), the column number must be higher than the row
+					// if this is not currently the case then the row and column should be swapped
+					if (row > column) {
+						temp = column;
+						column = row;
+						row = temp;
+					}
 					
 					jQueryLocatorPhrase = '#suspects > tbody > tr:eq(' + row + ') > td:eq(' + column + ')';
 					
@@ -456,7 +465,7 @@ $(document).ready(function() {
     // highlight the murderer
 	$('#showMurdererBtn').click( function() {
 		murderer = suspectCollection.getMurderer();
-		$( murderer.rowTdLocatorPhrase() ).addClass('murderer');
+		$( murderer.headerLocatorPhrase() ).addClass('murderer');
     });
     
     

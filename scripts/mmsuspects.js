@@ -8,7 +8,7 @@ function Suspect(id,name,img) {
 	var _id = id;
 	var _name = name;
 	var _img = img;
-	var _rowTdLocatorPhrase;
+	var _headerLocatorPhrase;
 	var _columnTdLocatorPhrase;
 	
 	return {
@@ -17,22 +17,23 @@ function Suspect(id,name,img) {
 		name : _name,
 		img : _img,
 		/*
-		* rowTdLocatorPhrase
+		* headerLocatorPhrase
 		* @param - (optional) a jQuery string used to locate the the cell this Suspect is displayed in, within the header row along the top of the table 
-		* if given, the rowTdLocatorPhrase is set, if not given, it is returned
+		* if given, the headerLocatorPhrase is set, if not given, it is returned
 		*/
-		rowTdLocatorPhrase : function (phrase) {
+		headerLocatorPhrase : function (phrase) {
 			if (phrase) {
-				_rowTdLocatorPhrase = phrase;
+				_headerLocatorPhrase = phrase;
 			} else {
-				return _rowTdLocatorPhrase;
+				return _headerLocatorPhrase;
 			}
 		},
 		
 		/*
+		* TODO this might be unused now
 		* columnTdLocatorPhrase
-		* @param - (optional) a jQuery string used to locate the the cell this Suspect is displayed in, within the header row along the top of the table 
-		* if given, the rowTdLocatorPhrase is set, if not given, it is returned
+		* @param - (optional) a jQuery string used to locate the the cell this Suspect is displayed in
+		* if given, the columnTdLocatorPhrase is set, if not given, it is returned
 		*/
 		columnTdLocatorPhrase : function (phrase) {
 			if (phrase) {
