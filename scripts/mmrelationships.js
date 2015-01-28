@@ -110,6 +110,20 @@ function RelationshipView() {
 	var _jQueryLocatorPhrase;
 	
 	
+	/****************************
+	* private methods
+	*****************************/
+	var initVisNetwork;
+	
+	initVisNetwork = function(visObject) {
+		visObject.visNetwork = new vis.Network(visObject.visContainer, visObject.visData, visObject.visOptions);
+		
+		visObject.visNetwork.on( 'click', function(properties) {
+			alert('clicked node ' + properties.nodes);
+		});
+	}
+	
+	
 	/********************
 	* public
 	*********************/
@@ -188,14 +202,19 @@ function RelationshipView() {
 				visObject.visNodes.add( {id: recipient.id, label: recipient.name} );
 			}
 			
+			// add an edge between the recipient and instigator
+			visObject.visEdges.add( {from: instigator.id, to: recipient.id} );
+			
+			// old system of having relationships as nodes (looked too messy):
 			// add a new node to descibe the relationship itself
-			visObject.visNodes.add( {id: visObject.nextVisId, label: instigator.name + rType.phrase + recipient.name} );
+			// visObject.visNodes.add( {id: visObject.nextVisId, label: instigator.name + rType.phrase + recipient.name} );
 			
 			// add new edges
-			visObject.visEdges.add( {from: instigator.id, to: visObject.nextVisId} );
-			visObject.visEdges.add( {from: visObject.nextVisId, to: recipient.id} );
+			// visObject.visEdges.add( {from: instigator.id, to: visObject.nextVisId} );
+			// visObject.visEdges.add( {from: visObject.nextVisId, to: recipient.id} );
 			
-			++visObject.nextVisId; 
+			// increment the next available id for the next time we add a node
+			// ++visObject.nextVisId; 
 			
 			visObject.visData = {
 				nodes: visObject.visNodes,
@@ -203,14 +222,10 @@ function RelationshipView() {
 			};
 			
 			if (!visObject.visNetwork) {
-				visObject.visNetwork = new vis.Network(visObject.visContainer, visObject.visData, visObject.visOptions);
+				initVisNetwork(visObject);
 			} else {
 				visObject.visNetwork.redraw();
 			}
-			
-			visObject.visNetwork.on( 'click', function(properties) {
-				alert('clicked node ' + properties.nodes);
-			});
 		},
 		
 		

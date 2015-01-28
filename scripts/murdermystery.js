@@ -20,25 +20,12 @@ var testing = false;
 *global variables for the murder mystery logic stored here
 */
 var MMVars = {
-	// some default Suspects. TODO - allow user to enter their own Suspects using Facebook
+	// some default Suspects. (Big) TODO - allow user to enter their own Suspects using Facebook
 	SuspectNames : ['Barak Obama','Jet Li','David Bowie','Gwen Stefani','Marie Curie','Jane Austen','Taylor Swift','Liam Neeson'],
 	SuspectImages : ['img/BarackObama.jpg','img/JetLi.jpg','img/DavidBowie.jpg','img/GwenStefani.jpg','img/MarieCurie.jpg','img/JaneAusten.jpg','img/TaylorSwift.jpg','img/LiamNeeson.jpg'],
 	
 	//the minimum number of Relationships (between Suspects) in a game - use this for game balancing
 	MINIMUM_RELATIONSHIPS : 7,
-	
-	/////////// vis stuff TODO - find a better place for these
-	// visNodes : new vis.DataSet(),
-	// visEdges : new vis.DataSet(),
-	// visContainer : {},
-	// visData : {},
-	// visOptions : {
-	// 	width: '800px',
-	// 	height: '600px',
-	// 	physics: {}
-	// },
-	// visNetwork : undefined,
-	// nextVisId : 100
 }
 
 
@@ -254,8 +241,6 @@ var gameController = (function() {
 			
 			//intialize the vis (network display) container
 			_visObject.visContainer = document.getElementById('mynetwork');
-			// MMVars.visNetwork = new vis.Network(MMVars.visContainer, MMVars.visData, MMVars.visOptions);
-			
 		}, // end createGameBoard
 		
 		/*
@@ -278,41 +263,38 @@ var gameController = (function() {
 					column = suspectsList.indexOf( rCollections[i].getRelationshipControllers()[j].recipient );
 					column++; // increment the column number to account for the first column with the suspect names
 					
-					// try {
-						jQueryLocatorPhrase = '#suspects > tbody > tr:eq(' + row + ') > td:eq(' + column + ')';
+					jQueryLocatorPhrase = '#suspects > tbody > tr:eq(' + row + ') > td:eq(' + column + ')';
+					
+					// in the appropriate cell we are going to make a nested table if it doesn't already exist, so that if there is more than one relationship between the 2 parties, 
+					// we can add each relationship in the nested table, one row per relationship
+					if ( $(jQueryLocatorPhrase + ' > table').length == 0 ) {
+						// put a new table with one row and one column inside the aforementioned appropriate cell
+						$(jQueryLocatorPhrase).append( $('<table><tbody><tr><td></td></tr></tbody></table>') );
+						// update the jQueryLocatorPhrase to now point to the cell inside the nested table
+						jQueryLocatorPhrase += ' > table > tbody > tr:eq(0) > td:eq(0)';
+					} else {
+						// we already have a nested table in the appropriate cell, so update the jQueryLocatorPhrase to point to it
+						jQueryLocatorPhrase += ' > table > tbody';
+						// ...and add a new row with a single column inside the nested table
+						$(jQueryLocatorPhrase).append( $('<tr><td></td></tr>') );
 						
-						// in the appropriate cell we are going to make a nested table if it doesn't already exist, so that if there is more than one relationship between the 2 parties, 
-						// we can add each relationship in the nested table, one row per relationship
-						if ( $(jQueryLocatorPhrase + ' > table').length == 0 ) {
-							// put a new table with one row and one column inside the aforementioned appropriate cell
-							$(jQueryLocatorPhrase).append( $('<table><tbody><tr><td></td></tr></tbody></table>') );
-							// update the jQueryLocatorPhrase to now point to the cell inside the nested table
-							jQueryLocatorPhrase += ' > table > tbody > tr:eq(0) > td:eq(0)';
-						} else {
-							// we already have a nested table in the appropriate cell, so update the jQueryLocatorPhrase to point to it
-							jQueryLocatorPhrase += ' > table > tbody';
-							// ...and add a new row with a single column inside the nested table
-							$(jQueryLocatorPhrase).append( $('<tr><td></td></tr>') );
-							
-							// finally update the jQueryLocatorPhrase to point to the new cell in the nested table
-							position = $(jQueryLocatorPhrase).children('tr').length - 1;
-							jQueryLocatorPhrase += ' > tr:eq(' + position + ')';
-							position = $(jQueryLocatorPhrase).children('td').length - 1;
-							jQueryLocatorPhrase += ' > td:eq(' + position + ')';
-						}
-						
-						//the Relationship can remember the jQueryLocatorPhrase for later access
-						rCollections[i].getRelationshipControllers()[j].jQueryLocatorPhrase(jQueryLocatorPhrase);
-						
-						// depending on the Relationship's visibility, display it or not
-						rCollections[i].getRelationshipControllers()[j].updateVisibilityDisplay();
-						
-						// put the description of the relationship in the newly created, appropriate cell
-						$(jQueryLocatorPhrase).text( rCollections[i].getRelationshipControllers()[j].instigator.name + ' ' + rCollections[i].getRelationshipType().phrase + ' ' + rCollections[i].getRelationshipControllers()[j].recipient.name );
-						$(jQueryLocatorPhrase).addClass( rCollections[i].getRelationshipType().name );
-					// } catch(err) {
-					// 	alert('could not properly complete table because: ' + err)
-					// }
+						// finally update the jQueryLocatorPhrase to point to the new cell in the nested table
+						position = $(jQueryLocatorPhrase).children('tr').length - 1;
+						jQueryLocatorPhrase += ' > tr:eq(' + position + ')';
+						position = $(jQueryLocatorPhrase).children('td').length - 1;
+						jQueryLocatorPhrase += ' > td:eq(' + position + ')';
+					}
+					
+					//the Relationship can remember the jQueryLocatorPhrase for later access
+					rCollections[i].getRelationshipControllers()[j].jQueryLocatorPhrase(jQueryLocatorPhrase);
+					
+					// depending on the Relationship's visibility, display it or not
+					rCollections[i].getRelationshipControllers()[j].updateVisibilityDisplay();
+					
+					// put the description of the relationship in the newly created, appropriate cell
+					$(jQueryLocatorPhrase).text( rCollections[i].getRelationshipControllers()[j].instigator.name + ' ' + rCollections[i].getRelationshipType().phrase + ' ' + rCollections[i].getRelationshipControllers()[j].recipient.name );
+					$(jQueryLocatorPhrase).addClass( rCollections[i].getRelationshipType().name );
+					
 				} // end for loop thru relationships
 			} // end for loop thru rCollections
 		}, // end populateGameBoard
