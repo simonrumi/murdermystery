@@ -62,6 +62,9 @@ td {
 	font-weight: bold;
 }
 
+.married, .affair, .blackmail, .inheritance, .evading, .noneToReveal, .popUpDialog {
+	border-radius: 10px;
+}
 
 .married {
 	background-color: #E09FA1; /* neutral light reddish */
@@ -86,10 +89,18 @@ td {
 	color: #FFFFFF;
 }
 
+.evading {
+	background-color: #520003; /* deep red */
+	color: #FFFFFF;
+}
+
+.noneToReveal {
+	background-color: #B8B2B2; /* grey red */
+	color: #FFFFFF;
+}
+
 .popUpDialog {
 	border: none;
-	border-radius: 10px;
-	background-color: #ffffff;
 	cursor: pointer;
 	padding: 5px;
 }

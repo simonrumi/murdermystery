@@ -4,13 +4,16 @@
 * A Suspect is a character in the game
 * @name - the suspect's name
 */
-function Suspect(name,img) {
+function Suspect(id,name,img) {
+	var _id = id;
 	var _name = name;
 	var _img = img;
 	var _rowTdLocatorPhrase;
 	var _columnTdLocatorPhrase;
 	
 	return {
+		aaClassName : "Suspect",
+		id : _id,
 		name : _name,
 		img : _img,
 		/*
@@ -69,7 +72,7 @@ function SuspectCollection() {
 	/*
 	* initializeRelationshipCollections
 	* there are a fixed set of RelationshipCollections that are defined here
-	* for future expansion, the RelationshipTypes could go in some kind of JSON config file
+	* TODO put these in a JSON config file
 	*/
 	initializeRelationshipCollections = function () {		
 		relationshipCollections.marriages = RelationshipCollection( RelationshipType('married', false, ' is married to ', MarriageRelationshipCalculator() ) );
@@ -85,7 +88,7 @@ function SuspectCollection() {
 	resetRelationshipCollections = function () {
 		var i;
 		for (i in relationshipCollections) {
-			relationshipCollections[i].clearRelationships();
+			relationshipCollections[i].clearRelationshipControllers();
 		}
 	}
 	
@@ -94,6 +97,7 @@ function SuspectCollection() {
 	* public methods
 	*********************/
 	return {
+		aaClassName : "SuspectCollection",
 	
 		getVictim : function () {
 			return victim;
@@ -133,7 +137,7 @@ function SuspectCollection() {
 				nameList = MMVars.SuspectNames;
 			}
 			for (i in nameList) {
-				suspectsArray.push( Suspect(nameList[i],MMVars.SuspectImages[i]) );
+				suspectsArray.push( Suspect(i, nameList[i], MMVars.SuspectImages[i]) );
 			}
 		},
 		
@@ -146,8 +150,8 @@ function SuspectCollection() {
 			while (!enoughRelationships) {
 				for (i in relationshipCollections) {
 					newRelationships = relationshipCollections[i].getRelationshipType().assignRandomRelationships(this);
-					relationshipCollections[i].addRelationships( newRelationships );
-					relationshipCount += relationshipCollections[i].getRelationships().length;
+					relationshipCollections[i].addRelationshipControllers( newRelationships );
+					relationshipCount += relationshipCollections[i].getRelationshipControllers().length;
 				}
 				
 				if (relationshipCount < MMVars.MINIMUM_RELATIONSHIPS) {
@@ -201,9 +205,9 @@ function SuspectCollection() {
 			var j;
 			var suspectRelationships = [];
 			for (i in relationshipCollections) {
-				for (j in relationshipCollections[i].getRelationships()) {
-					if ( (suspect == relationshipCollections[i].getRelationships()[j].instigator) || (suspect == relationshipCollections[i].getRelationships()[j].recipient) ) {
-						addToArray(relationshipCollections[i].getRelationships()[j], suspectRelationships);
+				for (j in relationshipCollections[i].getRelationshipControllers()) {
+					if ( (suspect == relationshipCollections[i].getRelationshipControllers()[j].instigator) || (suspect == relationshipCollections[i].getRelationshipControllers()[j].recipient) ) {
+						addToArray(relationshipCollections[i].getRelationshipControllers()[j], suspectRelationships);
 					}
 				}
 			}

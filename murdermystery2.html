@@ -7,6 +7,8 @@
 		<!-- 3rd party scripts -->
 		<script src="scripts/jquery-2.1.1.js"></script>
 		<script src="scripts/jquery.colorbox-min.js"></script>
+		<script type="text/javascript" src="vis/vis.min.js"></script>
+		
 		
 		<!-- our scripts -->
 		<script style="text/javascript" src="scripts/mmarrays.js"></script>
@@ -25,8 +27,9 @@
 	<body>
 		<div id="main_content">
 			<div id="game">
-			  <table id="suspects">
-			  </table>
+				<div id="mynetwork"></div>
+			 	<table id="suspects">
+			 	</table>
 			</div>
 			<div>
 				<button type="button" id="resetGameBtn">Start a new game</button>
@@ -35,10 +38,11 @@
 			</div>
 			
 			
+			
 			<!-- This contains the hidden content for inline calls -->
-			<div style='display:none'>  
-				<div id='relationshipdisplay'>
-					<table>
+			<div style="display:none">  
+				<div id="relationshipdisplay">
+					<table width="100%">
 						<tbody>
 							<tr>
 								<td id="popUpDialogImage1"><img class="suspectimg" src="img/BarackObama.jpg" width="300px"></td>

@@ -14,6 +14,7 @@ function RelationshipType(name, directional, phrase, relationshipCalculator) {
 	var _relationshipCalculator = relationshipCalculator;
 	
 	return {
+		aaClassName : "RelationshipType",
 		name : _name,
 		directional : _directional,
 		phrase : _phrase,
@@ -49,106 +50,21 @@ function Relationship(instigator, recipient, rType) {
 	 //whether or not this relationship is visible in the webpage
 	var _visible = false;
 	
-	// a string for use by jQuery: where to find this relationship in the web page's table
-	var _tdLocatorPhrase;
 	
 	//public variables & methods start here
 	return {
+		aaClassName : "Relationship",
 		instigator : _instigator,
 		recipient : _recipient,
 		relationshipType : _rType,
 		
-		/*
-		* isVisible
-		* @return true if the Relationship is currently visible, false if not
-		*/
-		isVisible : function () {
-			return _visible;
-		},
-		
-		/*
-		* tdLocatorPhrase
-		* @param - (optional) a jQuery string used to locate the the cell this Relationship is displayed in, in the webpage 
-		* if given, the tdLocatorPhrase is set, if not given, it is returned
-		*/
-		tdLocatorPhrase : function (phrase) {
-			if (phrase) {
-				_tdLocatorPhrase = phrase;
-			} else {
-				return _tdLocatorPhrase;
-			}
-		},
-		
-		
-		/*
-		* makeVisible - makes the display of this Relationship on the webpage visible
-		* relies on 
-		* - a css class called invisible
-		* - a css class called visible
-		* - tdLocatorPhrase specifying a place to find this Relationship on the webpage
-		*/
-		makeVisible : function (callback) {
-			if (_tdLocatorPhrase) {
-				$(_tdLocatorPhrase).removeClass('invisible');
-				$(_tdLocatorPhrase).addClass('visible');			
-				$(_tdLocatorPhrase).show(1000);
-				_visible = true;
-				
-				//configure the popUpDialog
-				$('#popUpDialogImage1').html('<img class="suspectimg" src="' + _instigator.img + '" width="300px">');
-				$('#popUpDialogImage2').html('<img class="suspectimg" src="' + _recipient.img + '" width="300px">');
-				$('#popUpDialogText').html('<p>' + _instigator.name + _rType.phrase + _recipient.name + '</p>');
-				
-				// now display the popUpDialog using colorbox
-				$.colorbox({
-					html: $('#relationshipdisplay').html(),
-					width: '650px',
-					height: '400px',
-					closeButton: false
-				}).postJQueryCallback( callback );
-				
-			} else {
-				throw 'could not make Relationship between ' + _instigator + ' and ' + _recipient + ' visible because there was no tdLocatorPhrase';
-			}
-			
-		},
-		
-		
-		/*
-		* makeInvisible - makes the display of this Relationship on the webpage visible
-		* relies on 
-		* - a css class called invisible
-		* - a css class called visible
-		* - tdLocatorPhrase specifying a place to find this Relationship on the webpage
-		*/
-		makeInvisible : function () {
-			if (_tdLocatorPhrase) {
-				$(_tdLocatorPhrase).removeClass('visible');
-				$(_tdLocatorPhrase).addClass('invisible');
-				$(_tdLocatorPhrase).hide(250);
-				_visible = false;
-			} else {
-				throw 'could not make Relationship invisible between  ' + _instigator + ' and ' + _recipient + ' because there was no tdLocatorPhrase';
-			}
-		},
-		
-		/*
-		* setVisibility - checks the current value of _visible and makes the display of the Relationship visible or invisible accordingly
-		*/
-		setVisibility : function () {
-			if (_visible) {
-				this.makeVisible();
-			} else {
-				this.makeInvisible();
-			}
-		},
 		
 		/*
 		* suspectInRelationship 
 		* @param suspect - a Suspect
 		* @return the string 'instagtor' if the suspect is the instigator in the Relationship
 		*  or the string 'recipient' if the suspect is the recipient in the Relationship
-		*  or false if the recipient isn't in the Relationship
+		*  or false if the suspect isn't in the Relationship
 		*/
 		suspectInRelationship : function(suspect) {
 			if (suspect == _instigator) {
@@ -174,10 +90,228 @@ function Relationship(instigator, recipient, rType) {
 			} else {
 				return false;
 			}
-		}	
+		}
 	}
 }
 
+
+/*
+* RelationshipView - for displaying a Relationship
+*/
+function RelationshipView() {
+	
+	/****************************
+	* private variables
+	*****************************/
+	//whether or not the Relationship is visible in the webpage
+	var _visible = false;
+	
+	// a jQuery string used to find where the Relationship is displayed on the page
+	var _jQueryLocatorPhrase;
+	
+	
+	/********************
+	* public
+	*********************/
+	return {
+		aaClassName : "RelationshipView",
+		
+		
+		/*
+		* jQueryLocatorPhrase
+		* @param phrase - (optional) a jQuery string used to locate where the Relationship is displayed in the webpage 
+		* @return - if phrase is given, the jQueryLocatorPhrase is set, if not given, it is returned
+		*/
+		jQueryLocatorPhrase : function (phrase) {
+			if (phrase) {
+				_jQueryLocatorPhrase = phrase;
+			} else {
+				return _jQueryLocatorPhrase;
+			}
+		},
+		
+		/*
+		* isVisible
+		* @return true if the Relationship is currently visible, false if not
+		*/
+		isVisible : function () {
+			return _visible;
+		},
+		
+				
+		/*
+		* makeVisible - makes the display of the Relationship on the webpage visible
+		* relies on 
+		* - a css class called invisible
+		* - a css class called visible
+		* - _jQueryLocatorPhrase specifying a place to find this Relationship on the webpage
+		* @param instigator - Suspect who is the instigator in the Relationship
+		* @param recipient - Suspect who is the recipient in the Relationship
+		* @param rType - the RelationshipType for this Relationship
+		* @param visObject - an object with all the stuff related to the vis node display
+		* @param callback - a function to run on .colorbox after the other makeVisible stuff is done
+		*/
+		makeVisible : function (instigator, recipient, rType, visObject, callback) {
+			if (_jQueryLocatorPhrase) {
+				$(_jQueryLocatorPhrase).removeClass('invisible');
+				$(_jQueryLocatorPhrase).addClass('visible');			
+				$(_jQueryLocatorPhrase).show(1000);
+				_visible = true;
+				
+				//configure the popUpDialog
+				$('#popUpDialogImage1').html('<img class="suspectimg" src="' + instigator.img + '" width="300px">');
+				$('#popUpDialogImage2').html('<img class="suspectimg" src="' + recipient.img + '" width="300px">');
+				$('#popUpDialogText').html('<p>' + instigator.name + rType.phrase + recipient.name + '</p>');
+				$('#relationshipdisplay > table').removeClass();
+				$('#relationshipdisplay > table').addClass(rType.name);
+				
+				// now display the popUpDialog using colorbox
+				$.colorbox({
+					html: $('#relationshipdisplay').html(),
+					width: '650px',
+					height: '400px',
+					speed: 200,
+					closeButton: false
+				}).postJQueryCallback( callback );
+				
+			} else {
+				throw 'RelationshipView.makeVisible(): missing jQueryLocatorPhrase';
+			}
+			
+			// vis stuff starts here
+			// add new nodes, if needed, for the recipient and instigator
+			if ( !visObject.visNodes._getItem(instigator.id) ) {
+				visObject.visNodes.add( {id: instigator.id, label: instigator.name} );
+			}
+			
+			if ( !visObject.visNodes._getItem(recipient.id) ) {
+				visObject.visNodes.add( {id: recipient.id, label: recipient.name} );
+			}
+			
+			// add a new node to descibe the relationship itself
+			visObject.visNodes.add( {id: visObject.nextVisId, label: instigator.name + rType.phrase + recipient.name} );
+			
+			// add new edges
+			visObject.visEdges.add( {from: instigator.id, to: visObject.nextVisId} );
+			visObject.visEdges.add( {from: visObject.nextVisId, to: recipient.id} );
+			
+			++visObject.nextVisId; 
+			
+			visObject.visData = {
+				nodes: visObject.visNodes,
+				edges: visObject.visEdges,
+			};
+			
+			if (!visObject.visNetwork) {
+				visObject.visNetwork = new vis.Network(visObject.visContainer, visObject.visData, visObject.visOptions);
+			} else {
+				visObject.visNetwork.redraw();
+			}
+			
+			visObject.visNetwork.on( 'click', function(properties) {
+				alert('clicked node ' + properties.nodes);
+			});
+		},
+		
+		
+		/*
+		* makeInvisible - makes the display of this Relationship on the webpage visible
+		* relies on 
+		* - a css class called invisible
+		* - a css class called visible
+		* - tdLocatorPhrase specifying a place to find this Relationship on the webpage
+		*/
+		makeInvisible : function () {
+			if (_jQueryLocatorPhrase) {
+				$(_jQueryLocatorPhrase).removeClass('visible');
+				$(_jQueryLocatorPhrase).addClass('invisible');
+				$(_jQueryLocatorPhrase).hide(250);
+				_visible = false;
+			} else {
+				throw 'RelationshipView.makeInvisible(): missing jQueryLocatorPhrase';
+			}
+		}
+	}
+}
+
+/*
+* RelationshipController
+* @param relationship - a Relationship (the model)
+* @param relationshipview - a RelationshipView (the view)
+*/
+function RelationshipController(relationship,relationshipView) {
+	var _relationship = relationship;
+	var _relationshipView = relationshipView;
+	
+	return {
+		aaClassName : "RelationshipController",
+		instigator : _relationship.instigator,
+		recipient : _relationship.recipient,
+		relationshipType : _relationship.relationshipType,
+		
+		
+		/*
+		* otherInRelationship
+		* @param suspect - the given Suspect
+		* @return if the given Suspect is in the Relationship, then this returns the other Suspect in the Relationship
+		* otherwise returns false, indicating the given Suspect wasn't in the Relationship
+		*/
+		otherInRelationship : function (suspect) {
+			return _relationship.otherInRelationship(suspect);
+		},
+		
+		/*
+		* jQueryLocatorPhrase - set or return a jQuery phrase that finds where the Relationship is displayed on the page
+		* @param phrase - (optional) a jQuery string used to locate where the Relationship is displayed in the webpage 
+		* @return - if phrase is given, the jQueryLocatorPhrase is set, if not given, it is returned
+		*/
+		jQueryLocatorPhrase : function (phrase) {
+			_relationshipView.jQueryLocatorPhrase(phrase);
+		},
+		
+		/*
+		* updateVisibilityDisplay - checks the current value of _visible and makes the display of the Relationship visible or invisible accordingly
+		*/
+		updateVisibilityDisplay : function () {
+			if (_relationshipView.isVisible()) {
+				_relationshipView.makeVisible(_relationship.instigator, _relationship.recipient, _relationship.relationshipType);
+			} else {
+				_relationshipView.makeInvisible();
+			}
+		},
+		
+		/* isVisible
+		* @return true if the Relationship is currently visible, false if not
+		*/
+		isVisible : function () {
+			return _relationshipView.isVisible();
+		},
+		
+		/*
+		* makeVisible - makes the display of the Relationship on the webpage visible
+		* relies on 
+		* - a css class called invisible
+		* - a css class called visible
+		* - _jQueryLocatorPhrase specifying a place to find this Relationship on the webpage
+		* @param visObject - an object containing all the stuff to do with the vis node display
+		* @param callback - a function to run on .colorbox after the other makeVisible stuff is done
+		*/
+		makeVisible : function (visObject, callback) {
+			_relationshipView.makeVisible(_relationship.instigator, _relationship.recipient, _relationship.relationshipType, visObject, callback);
+		},
+		
+		/*
+		* suspectInRelationship 
+		* @param suspect - a Suspect
+		* @return the string 'instagtor' if the suspect is the instigator in the Relationship
+		*  or the string 'recipient' if the suspect is the recipient in the Relationship
+		*  or false if the suspect isn't in the Relationship
+		*/
+		suspectInRelationship : function (suspect) {
+			return _relationship.suspectInRelationship(suspect);
+		}
+	}
+}
 
 /*
 * RelationshipColletion
@@ -185,49 +319,12 @@ function Relationship(instigator, recipient, rType) {
 */
 function RelationshipCollection(relationshipType) {
 	var _relationshipType = relationshipType;
-	var _relationships = [];
+	var _relationshipControllers = [];
 	
 	return {
-		//relationshipType : _relationshipType,
-		//relationships : _relationships,
-		length : _relationships.length,
+		aaClassName : "RelationshipCollection",
+		length : _relationshipControllers.length,
 		
-		/*
-		* add a single Relationship to the collection, ensuring there are no duplicates
-		* @param relationship - a Relationship object
-		*/
-		addRelationship : function (relationship) {
-			if (_relationships.indexOf(relationship) == -1) {
-				_relationships.push(relationship);
-			}
-		},
-		
-		/*
-		* add an array of Relationships to the collection, ensuring there are no duplicates
-		* @param relationshipArray - an array of Relationship objects
-		*/
-		addRelationships : function (relationshipArray) {
-			var i;
-			for (i in relationshipArray) {
-				this.addRelationship( relationshipArray[i] );	
-			}
-		},
-		
-		/*
-		* getRelationships
-		* @return - the array of Relationships held in this collection
-		*/
-		getRelationships : function () {
-			return _relationships;
-		},
-		
-		/*
-		* clearRelationships
-		* clears out all the relationships held in this RelationshipCollection
-		*/
-		clearRelationships : function () {
-			_relationships = [];
-		},
 		
 		/*
 		* getRelationshipType
@@ -236,13 +333,55 @@ function RelationshipCollection(relationshipType) {
 		getRelationshipType : function () {
 			return _relationshipType;
 		},
+		
+		/*
+		* add a single RelationshipController to the collection, ensuring there are no duplicates
+		* @param rController - a RelationshipController
+		*/
+		addRelationshipController : function (rController) {
+			if (_relationshipControllers.indexOf(rController) == -1) {
+				_relationshipControllers.push(rController);
+			}
+		},
+		
+		/*
+		* add an array of RelationshipsControllers to the collection, ensuring there are no duplicates, based on the given array of Relationships
+		* @param relationshipArray - an array of Relationships objects
+		*/
+		addRelationshipControllers : function (relationshipArray) {
+			var i;
+			var currentView;
+			var currentController;
+			
+			for (i in relationshipArray) {
+				currentView = RelationshipView();
+				currentController = RelationshipController(relationshipArray[i], currentView)
+				this.addRelationshipController(currentController);	
+			}
+		},
+		
+		/*
+		* getRelationshipControllers
+		* @return - the array of RelationshipControllers held in this collection
+		*/
+		getRelationshipControllers : function () {
+			return _relationshipControllers;
+		},
+		
+		/*
+		* clearRelationshipControllers
+		* clears out all the RelationshipControllers held in this RelationshipCollection
+		*/
+		clearRelationshipControllers : function () {
+			_relationshipControllers = [];
+		}
 	}
 }
 
 
 /*
 * RelationshipCalculatorInterface
-* this is just here to show what Relationship objects should implement, not for actual use 
+* this is just here to show what RelationshipCalculator objects should implement, not for actual use 
 */
 function RelationshipCalculatorInterface() {
 	
@@ -274,6 +413,7 @@ function RelationshipCalculatorInterface() {
 function MarriageRelationshipCalculator() {
 	
 	return {
+		aaClassName : "MarriageRelationshipCalculator implements RelationshipCalculatorInterface",
 	
 		/*
 		* assignRandomRelationships 
@@ -345,6 +485,8 @@ function MarriageRelationshipCalculator() {
 function AffairRelationshipCalculator() {
 	
 	return {
+		aaClassName : "AffairRelationshipCalculator implements RelationshipCalculatorInterface",
+		
 		/*
 		* assignRandomRelationships 
 		* goes thru the suspects and randomly assigns Relationships 
@@ -355,7 +497,7 @@ function AffairRelationshipCalculator() {
 			log('assigning random affairs');
 			
 			var suspectsArray = suspectCollection.getSuspectsArray();
-			var marriageRelationships = suspectCollection.getRelationshipCollections().marriages.getRelationships();
+			var marriageRelationships = suspectCollection.getRelationshipCollections().marriages.getRelationshipControllers();
 			var i;
 			var currentSuspect;
 			var currentSpouse;
@@ -403,8 +545,8 @@ function AffairRelationshipCalculator() {
 		* @return - a list of enemies, from the suspectsArray, that arise from this Relationship type
 		*/
 		findEnemies : function (victim, suspectCollection) {
-			var affairRelationships = suspectCollection.getRelationshipCollections().affairs.getRelationships();
-			var marriageRelationships = suspectCollection.getRelationshipCollections().marriages.getRelationships();
+			var affairRelationships = suspectCollection.getRelationshipCollections().affairs.getRelationshipControllers();
+			var marriageRelationships = suspectCollection.getRelationshipCollections().marriages.getRelationshipControllers();
 			var i;
 			var j;
 			var enemies = [];
@@ -447,6 +589,8 @@ function AffairRelationshipCalculator() {
 */ 
 function BlackmailRelationshipCalculator() {
 	return {
+		aaClassName : "BlackmailRelationshipCalculator implements RelationshipCalculatorInterface",
+		
 		/*
 		* assignRandomRelationships 
 		* goes thru the suspects and randomly assigns Relationships 
@@ -457,8 +601,8 @@ function BlackmailRelationshipCalculator() {
 			log('assigning random blackmails');
 			
 			var suspectsArray = suspectCollection.getSuspectsArray();
-			var affairRelationships = suspectCollection.getRelationshipCollections().affairs.getRelationships();
-			var marriageRelationships = suspectCollection.getRelationshipCollections().marriages.getRelationships();
+			var affairRelationships = suspectCollection.getRelationshipCollections().affairs.getRelationshipControllers();
+			var marriageRelationships = suspectCollection.getRelationshipCollections().marriages.getRelationshipControllers();
 			var i;
 			var j;
 			var lookingForCuckhold = true;
@@ -546,7 +690,7 @@ function BlackmailRelationshipCalculator() {
 		* @return - a list of enemies, from the suspectsArray, that arise from this Relationship type
 		*/
 		findEnemies : function (victim, suspectCollection) {
-			var blackmailRelationships = suspectCollection.getRelationshipCollections().blackmails.getRelationships();
+			var blackmailRelationships = suspectCollection.getRelationshipCollections().blackmails.getRelationshipControllers();
 			var i;
 			var enemies = [];
 			
@@ -577,6 +721,8 @@ function BlackmailRelationshipCalculator() {
 function InheritanceRelationshipCalculator() {
 
 	return {
+		aaClassName : "InheritanceRelationshipCalculator implements RelationshipCalculatorInterface",
+		
 		/*
 		* assignRandomRelationships 
 		* goes thru the suspects and randomly assigns Relationships 
@@ -616,7 +762,7 @@ function InheritanceRelationshipCalculator() {
 		* @return - a list of enemies, from the suspectsArray, that arise from this Relationship type
 		*/
 		findEnemies : function (victim, suspectCollection) {
-			var inheritanceRelationships = suspectCollection.getRelationshipCollections().inheritances.getRelationships();
+			var inheritanceRelationships = suspectCollection.getRelationshipCollections().inheritances.getRelationshipControllers();
 			var i;
 			var enemies = [];
 			
