@@ -68,26 +68,14 @@ var gameController = (function() {
 	
 	
 	// vis stuff
-	var _visNodes = new vis.DataSet();
-	var _visEdges = new vis.DataSet();
-	var _visContainer = {};
-	var _visData = {};
-	var _visOptions = {
-		width: '800px',
-		height: '600px',
-		physics: {}
-	};
+	var _visNodes;
+	var _visEdges;
+	var _visContainer;
+	var _visData;
+	var _visOptions;
 	var _visNetwork;
-	var _nextVisId = 100;
-	var _visObject = {
-		'visNodes' : _visNodes, 
-		'visEdges' : _visEdges, 
-		'visContainer' : _visContainer, 
-		'visData' : _visData, 
-		'visOptions' : _visOptions, 
-		'visNetwork' : _visNetwork, 
-		'nextVisId' : _nextVisId
-	}
+	var _nextVisId;
+	var _visObject;
 	
 	
 	
@@ -97,6 +85,7 @@ var gameController = (function() {
 	var additionalColorboxFormatting;
 	var displaySuspectHeader;
 	var displaySuspectRows;
+	var initVis;
 	
 	additionalColorboxFormatting = function (className) {
 		// close the colorbox when the user clicks on it anywhere
@@ -185,6 +174,29 @@ var gameController = (function() {
 		}	
 	}
 	
+	initVis  = function () {
+		_visNodes = new vis.DataSet();
+		_visEdges = new vis.DataSet();
+		_visContainer = {};
+		_visData = {};
+		_visOptions = {
+			width: '800px',
+			height: '600px',
+			physics: {}
+		};
+		_nextVisId = 100;
+		
+		return {
+			'visNodes' : _visNodes, 
+			'visEdges' : _visEdges, 
+			'visContainer' : _visContainer, 
+			'visData' : _visData, 
+			'visOptions' : _visOptions, 
+			'visNetwork' : _visNetwork, 
+			'nextVisId' : _nextVisId
+		}
+	}
+	
 	/********************
 	* public properties & methods
 	*********************/
@@ -201,6 +213,9 @@ var gameController = (function() {
 			suspectsList = suspectCollection.getSuspectsArray();
 			rCollections = suspectCollection.getRelationshipCollections();
 			suspectCollection.init();
+			_visObject = initVis();
+			
+			
 			
 			if (testing) {
 				// TODO create these
@@ -230,6 +245,16 @@ var gameController = (function() {
 		*/
 		clearTable : function() {
 			$('#suspects').empty();
+			_visObject = initVis();
+			
+			_visObject.visData = {
+				nodes: _visObject.visNodes,
+				edges: _visObject.visEdges,
+			};
+			
+			_visObject.visContainer = document.getElementById('mynetwork');
+			
+			_visObject.visNetwork = new vis.Network(_visObject.visContainer, _visObject.visData, _visObject.visOptions);
 		},
 		
 		/*
