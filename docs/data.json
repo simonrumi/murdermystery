@@ -1,0 +1,1875 @@
+{
+    "project": {},
+    "files": {
+        "jquery-2.1.1.js": {
+            "name": "jquery-2.1.1.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "mmrelationships.js": {
+            "name": "mmrelationships.js",
+            "modules": {},
+            "classes": {
+                "RelationshipType": 1,
+                "Relationship": 1,
+                "RelationshipView": 1,
+                "RelationshipController": 1,
+                "RelationshipColletion": 1,
+                "RelationshipCalculatorInterface": 1,
+                "MarriageRelationshipCalculator": 1,
+                "AffairRelationshipCalculator": 1,
+                "BlackmailRelationshipCalculator": 1,
+                "InheritanceRelationshipCalculator": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "mmsuspects.js": {
+            "name": "mmsuspects.js",
+            "modules": {},
+            "classes": {
+                "Suspect": 1,
+                "SuspectCollection": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "murdermystery.js": {
+            "name": "murdermystery.js",
+            "modules": {
+                "gameController": 1
+            },
+            "classes": {
+                "gameController": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gameController": {
+            "name": "gameController",
+            "submodules": {},
+            "classes": {
+                "RelationshipType": 1,
+                "Relationship": 1,
+                "RelationshipView": 1,
+                "RelationshipController": 1,
+                "RelationshipColletion": 1,
+                "RelationshipCalculatorInterface": 1,
+                "MarriageRelationshipCalculator": 1,
+                "AffairRelationshipCalculator": 1,
+                "BlackmailRelationshipCalculator": 1,
+                "InheritanceRelationshipCalculator": 1,
+                "Suspect": 1,
+                "SuspectCollection": 1,
+                "gameController": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "murdermystery.js",
+            "line": 221,
+            "description": "The gameController is the module that runs all the game logic"
+        }
+    },
+    "classes": {
+        "RelationshipType": {
+            "name": "RelationshipType",
+            "shortname": "RelationshipType",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 3,
+            "description": "There are just a few instances of this; each one describes a kind of relationship, such as a marriage, an affair, blackmail etc.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "name",
+                    "description": "- the name of the relationship type, which is also used as a class name in the css",
+                    "type": "String"
+                },
+                {
+                    "name": "directional",
+                    "description": "- if true, the instigator of the relationship does something to the recipient (such as instigator leaves inheritance to the recipient),\nif false then the relationship is mutual, e.g. a marriage",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "phrase",
+                    "description": "- for displaying a description of the relationship between the instigator and recipient in the form \"instigator[phrase]recipient\", e.g. phrase could be \" is married to \"",
+                    "type": "String"
+                },
+                {
+                    "name": "relationshipCalculator",
+                    "description": "- A function which knows how to assignRandomRelationships and findEnemies for this particular RelationshipType",
+                    "type": "Function"
+                }
+            ]
+        },
+        "Relationship": {
+            "name": "Relationship",
+            "shortname": "Relationship",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 91,
+            "description": "A Relationship is the model in the MVC structure that also involves RelationshipView and RelationshipController",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "instigator",
+                    "description": "- one of the Suspects in the Relationship, who is doing/giving something to the recipient in directional Relationships",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "recipient",
+                    "description": "- the other Suspect in the Relationship, who is the object of the instigor's action in directional Relationships",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "rType",
+                    "description": "- the RelationshipType of this Relationship.",
+                    "type": "RelationshipType"
+                }
+            ]
+        },
+        "RelationshipView": {
+            "name": "RelationshipView",
+            "shortname": "RelationshipView",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 177,
+            "description": "The View in the MVC setup for Relationships",
+            "is_constructor": 1
+        },
+        "RelationshipController": {
+            "name": "RelationshipController",
+            "shortname": "RelationshipController",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 347,
+            "description": "The Controller in the MVC setup for Relationships\nNote this Controller is the central hub, ie it tells the view what to do and the model what to do.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "relationship",
+                    "description": "The model",
+                    "type": "Relationship"
+                },
+                {
+                    "name": "relationshipview",
+                    "description": "The view",
+                    "type": "RelationshipView"
+                }
+            ]
+        },
+        "RelationshipColletion": {
+            "name": "RelationshipColletion",
+            "shortname": "RelationshipColletion",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 465,
+            "description": "A group of Relationships, all of the same RelationshipType. This is used by SuspectCollection.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "relationshipType",
+                    "description": "The RelationshipType for the Relationships in this collection",
+                    "type": "RelationshipType"
+                }
+            ]
+        },
+        "RelationshipCalculatorInterface": {
+            "name": "RelationshipCalculatorInterface",
+            "shortname": "RelationshipCalculatorInterface",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 548,
+            "description": "This is just here to show what RelationshipCalculator objects should implement, not for actual use, since Javascript doesn't do interfaces"
+        },
+        "MarriageRelationshipCalculator": {
+            "name": "MarriageRelationshipCalculator",
+            "shortname": "MarriageRelationshipCalculator",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 591,
+            "description": "Implements RelationshipCalculatorInterface",
+            "is_constructor": 1
+        },
+        "AffairRelationshipCalculator": {
+            "name": "AffairRelationshipCalculator",
+            "shortname": "AffairRelationshipCalculator",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 669,
+            "description": "Implements RelationshipCalculatorInterface",
+            "is_constructor": 1
+        },
+        "BlackmailRelationshipCalculator": {
+            "name": "BlackmailRelationshipCalculator",
+            "shortname": "BlackmailRelationshipCalculator",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 780,
+            "description": "Implements RelationshipCalculatorInterface",
+            "is_constructor": 1
+        },
+        "InheritanceRelationshipCalculator": {
+            "name": "InheritanceRelationshipCalculator",
+            "shortname": "InheritanceRelationshipCalculator",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmrelationships.js",
+            "line": 917,
+            "description": "Implements RelationshipCalculatorInterface",
+            "is_constructor": 1
+        },
+        "Suspect": {
+            "name": "Suspect",
+            "shortname": "Suspect",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmsuspects.js",
+            "line": 3,
+            "description": "A Suspect is a character in the game, which includes all the suspects as well as the murder and the victim",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "id",
+                    "description": "A unique identifier of the Suspect. This is also the position of the Suspect in the suspectsArray",
+                    "type": "Number"
+                },
+                {
+                    "name": "name",
+                    "description": "The Suspect's name",
+                    "type": "String"
+                },
+                {
+                    "name": "img",
+                    "description": "The url of an image of the Suspect",
+                    "type": "String"
+                }
+            ]
+        },
+        "SuspectCollection": {
+            "name": "SuspectCollection",
+            "shortname": "SuspectCollection",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "file": "mmsuspects.js",
+            "line": 80,
+            "description": "A SuspectCollection contains an array of Suspects for the game.\nIt knows which Suspect is the victim and which is the murderer",
+            "is_constructor": 1
+        },
+        "gameController": {
+            "name": "gameController",
+            "shortname": "gameController",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gameController",
+            "namespace": "",
+            "file": "murdermystery.js",
+            "line": 221,
+            "description": "Public methods of gameController"
+        }
+    },
+    "classitems": [
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 846,
+            "description": "Create key-value caches of limited size",
+            "return": {
+                "description": "Returns the Object data after storing it on itself with\n\tproperty name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)\n\tdeleting the oldest entry",
+                "type": "Function(string, Object)"
+            },
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 866,
+            "description": "Mark a function for special use by Sizzle",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to mark",
+                    "type": "Function"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 875,
+            "description": "Support testing using an element",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "Passed the created div and expects a boolean result",
+                    "type": "Function"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 896,
+            "description": "Adds the same handler for all of the specified attrs",
+            "params": [
+                {
+                    "name": "attrs",
+                    "description": "Pipe-separated list of attributes",
+                    "type": "String"
+                },
+                {
+                    "name": "handler",
+                    "description": "The method that will be applied",
+                    "type": "Function"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 910,
+            "description": "Checks document order of two siblings",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "",
+                    "type": "Element"
+                },
+                {
+                    "name": "b",
+                    "description": "",
+                    "type": "Element"
+                }
+            ],
+            "return": {
+                "description": "Returns less than 0 if a precedes b, greater than 0 if a follows b",
+                "type": "Number"
+            },
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 939,
+            "description": "Returns a function to use in pseudos for input types",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 950,
+            "description": "Returns a function to use in pseudos for buttons",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 961,
+            "description": "Returns a function to use in pseudos for positionals",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 983,
+            "description": "Checks a node for validity as a Sizzle context",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "",
+                    "type": "Element|Object="
+                }
+            ],
+            "return": {
+                "description": "The input node if acceptable, otherwise a falsy value",
+                "type": "Element|Object|Boolean"
+            },
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 995,
+            "description": "Detects XML nodes",
+            "params": [
+                {
+                    "name": "elem",
+                    "description": "An element or a document",
+                    "type": "Element|Object"
+                }
+            ],
+            "return": {
+                "description": "True iff elem is a non-HTML XML node",
+                "type": "Boolean"
+            },
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 1007,
+            "description": "Sets document-related variables once based on the current document",
+            "params": [
+                {
+                    "name": "doc",
+                    "description": "An element or document object to use to set the document",
+                    "type": "Element|Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "Returns the current document",
+                "type": "Object"
+            },
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 1440,
+            "description": "Document sorting and removing duplicates",
+            "params": [
+                {
+                    "name": "results",
+                    "description": "",
+                    "type": "ArrayLike"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 1473,
+            "description": "Utility function for retrieving the text value of an array of DOM nodes",
+            "params": [
+                {
+                    "name": "elem",
+                    "description": "",
+                    "type": "Array|Element"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 2440,
+            "description": "A low-level selection function that works with Sizzle's compiled\n selector functions",
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "A selector or a pre-compiled\n selector function built with Sizzle.compile",
+                    "type": "String|Function"
+                },
+                {
+                    "name": "context",
+                    "description": "",
+                    "type": "Element"
+                },
+                {
+                    "name": "results",
+                    "description": "",
+                    "type": "Array",
+                    "optional": true
+                },
+                {
+                    "name": "seed",
+                    "description": "A set of elements to match against",
+                    "type": "Array",
+                    "optional": true
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 3401,
+            "description": "The ready event handler and self cleanup method",
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 3494,
+            "description": "Determines whether an object can have data",
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 5454,
+            "description": "Retrieve the actual display of a element",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "nodeName of the element",
+                    "type": "String"
+                },
+                {
+                    "name": "doc",
+                    "description": "Document object",
+                    "type": "Object"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 5478,
+            "description": "Try to determine the default display value of an element",
+            "params": [
+                {
+                    "name": "nodeName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 8823,
+            "description": "Load a url into a page",
+            "class": "RelationshipType"
+        },
+        {
+            "file": "jquery-2.1.1.js",
+            "line": 8897,
+            "description": "Gets a window from an element",
+            "class": "RelationshipType"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 20,
+            "description": "This just gives the name of the class so that it can be more easily seen in the debugger.",
+            "itemtype": "property",
+            "name": "aaClassName",
+            "type": "{String}",
+            "default": "\"RelationshipType\"",
+            "class": "RelationshipType"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 28,
+            "description": "The name of the relationship type, which is also used as a class name in the css",
+            "itemtype": "property",
+            "name": "name",
+            "type": "{String}",
+            "class": "RelationshipType"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 35,
+            "description": "If true, the instigator of the relationship does something to the recipient (such as instigator leaves inheritance to the recipient),\nif false then the relationship is mutual, e.g. a marriage",
+            "itemtype": "property",
+            "name": "directional",
+            "type": "{Boolean}",
+            "class": "RelationshipType"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 43,
+            "description": "for displaying a description of the relationship between the instigator and recipient in the form \"instigator[phrase]recipient\", \ne.g. phrase could be \" is married to \"",
+            "itemtype": "property",
+            "name": "phrase",
+            "type": "{String}",
+            "class": "RelationshipType"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 51,
+            "description": "This randomly assigns Relationships of this RelationshipType to the Suspects in the given suspectCollection. \nIn fact this method simply calls the assignRandomRelationships method of the relationshipCalculator, which implements the specific method for this\nRelationshipType. This means that the caller of this method doesn't need to know what specific RelationshipType it is dealing with (bridge pattern).",
+            "itemtype": "method",
+            "name": "assignRandomRelationships",
+            "params": [
+                {
+                    "name": "suspectCollection",
+                    "description": "The singleton holding the collection of Suspects",
+                    "type": "SuspectCollection"
+                }
+            ],
+            "return": {
+                "description": "An array of newly created Relationships",
+                "type": "Array"
+            },
+            "class": "RelationshipType"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 63,
+            "description": "Figures out  the enemies of the \"Suspect\" who has been murdred (the victim)\nIn fact this method simply calls the findEnemies method of the relationshipCalculator, which implements the specific method for this\nRelationshipType. This means that the caller of this method doesn't need to know what specific RelationshipType it is dealing with (bridge pattern).",
+            "itemtype": "method",
+            "name": "findEnemies",
+            "params": [
+                {
+                    "name": "victim",
+                    "description": "The \"Suspect\" who has been murdered, for whom to identify enemies",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "suspectCollection",
+                    "description": "The singleton holding the collection of Suspects",
+                    "type": "SuspectCollection"
+                }
+            ],
+            "return": {
+                "description": "An array of Suspects who are enemies of the victim",
+                "type": "Array"
+            },
+            "class": "RelationshipType"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 76,
+            "description": "The user clicks on the name of a Suspect in order to \"question\" that Suspect. The Suspect might reveal a Relationship (s)he is involved in,\nand this is method is for determining whehter to do so or not.\nIn fact this method simply calls the revealRelationshipUnderQuestioning method of the relationshipCalculator, which implements the specific method for this\nRelationshipType. This means that the caller of this method doesn't need to know what specific RelationshipType it is dealing with (bridge pattern).",
+            "itemtype": "method",
+            "name": "revealRelationshipUnderQuestioning",
+            "return": {
+                "description": "true if a Relationship should be revealed, false if not",
+                "type": "Boolean"
+            },
+            "class": "RelationshipType"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 111,
+            "description": "This just gives the name of the class so that it can be more easily seen in the debugger.",
+            "itemtype": "property",
+            "name": "aaClassName",
+            "type": "{String}",
+            "default": "\"Relationship\"",
+            "class": "Relationship"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 119,
+            "description": "The Suspect that is the instigator of the Relationship (in some Relationships instigators do something to the recipient)",
+            "itemtype": "property",
+            "name": "instigator",
+            "type": "{Suspect}",
+            "class": "Relationship"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 126,
+            "description": "The Suspect that is the recipient in the Relationship (in some Relationships recipents have something done to them by the instigator)",
+            "itemtype": "property",
+            "name": "recipient",
+            "type": "{Suspect}",
+            "class": "Relationship"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 133,
+            "description": "The RelationshipType (e.g. marraige, blackmail, etc) that the instigator and recipient are involved in.",
+            "itemtype": "property",
+            "name": "relationshipType",
+            "type": "{RelationshipType}",
+            "class": "Relationship"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 141,
+            "itemtype": "method",
+            "name": "suspectInRelationship",
+            "params": [
+                {
+                    "name": "suspect",
+                    "description": "",
+                    "type": "Suspect"
+                }
+            ],
+            "return": {
+                "description": "The string 'instagtor' if the suspect is the instigator in the Relationship,\n or the string 'recipient' if the suspect is the recipient in the Relationship,\n or false if the suspect isn't in the Relationship.",
+                "type": "String/Boolean"
+            },
+            "class": "Relationship"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 158,
+            "itemtype": "method",
+            "name": "otherInRelationship",
+            "params": [
+                {
+                    "name": "suspect",
+                    "description": "",
+                    "type": "Suspect"
+                }
+            ],
+            "return": {
+                "description": "if the suspect is in the Relationship, then this returns the other Suspect in the Relationship\notherwise returns false, indicating the given Suspect wasn't in the Relationship",
+                "type": "Suspect/Boolean"
+            },
+            "class": "Relationship"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 184,
+            "description": "private variables",
+            "class": "RelationshipView"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 194,
+            "description": "private methods",
+            "class": "RelationshipView"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 208,
+            "description": "public",
+            "class": "RelationshipView"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 212,
+            "description": "This just gives the name of the class so that it can be more easily seen in the debugger.",
+            "itemtype": "property",
+            "name": "aaClassName",
+            "type": "{String}",
+            "default": "\"RelationshipView\"",
+            "class": "RelationshipView"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 221,
+            "description": "Gets or sets a jQuery string used to locate where the Relationship is displayed in the webpage",
+            "itemtype": "method",
+            "name": "jQueryLocatorPhrase",
+            "params": [
+                {
+                    "name": "phrase",
+                    "description": "- (optional) a jQuery string used to locate where the Relationship is displayed in the webpage"
+                }
+            ],
+            "return": {
+                "description": "- if phrase is given, the jQueryLocatorPhrase is set, if not given, it is returned"
+            },
+            "class": "RelationshipView"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 235,
+            "itemtype": "method",
+            "name": "isVisible",
+            "return": {
+                "description": "True if the Relationship is currently visible, false if not"
+            },
+            "class": "RelationshipView"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 244,
+            "description": "Makes the display of the Relationship on the webpage visible. To do so it \nrelies on \n- a css class called invisible\n- a css class called visible\n- jQueryLocatorPhrase specifying a place to find this Relationship on the webpage",
+            "itemtype": "method",
+            "name": "makeVisible",
+            "params": [
+                {
+                    "name": "instigator",
+                    "description": "The Suspect who is the instigator in the Relationship",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "recipient",
+                    "description": "The Suspect who is the recipient in the Relationship",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "rType",
+                    "description": "The RelationshipType for this Relationship"
+                },
+                {
+                    "name": "visObject",
+                    "description": "An object with all the stuff related to vis. (Vis is the javascript library that displays the animated network diagram)"
+                },
+                {
+                    "name": "callback",
+                    "description": "A function to run on .colorbox after the other makeVisible stuff is done. (Colorbox is the javascript library that displays the pop-up dialog boxes)"
+                }
+            ],
+            "class": "RelationshipView"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 324,
+            "description": "makes the display of this Relationship on the webpage visible.\nrelies on \n- a css class called invisible\n- a css class called visible\n- jQueryLocatorPhrase specifying a place to find this Relationship on the webpage\nTODO - this isn't currently used, but if it is needed, then it needs to update the vis stuff as well as the grid of relationships",
+            "itemtype": "method",
+            "name": "makeInvisible",
+            "class": "RelationshipView"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 362,
+            "description": "This just gives the name of the class so that it can be more easily seen in the debugger.",
+            "itemtype": "property",
+            "name": "aaClassName",
+            "type": "{String}",
+            "default": "\"RelationshipController\"",
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 370,
+            "description": "The Suspect that is the instigator of the Relationship (in some Relationships instigators do something to the recipient)",
+            "itemtype": "property",
+            "name": "instigator",
+            "type": "{Suspect}",
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 377,
+            "description": "The Suspect that is the recipient of the Relationship (in some Relationships instigators do something to the recipient)",
+            "itemtype": "property",
+            "name": "recipient",
+            "type": "{Suspect}",
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 384,
+            "description": "The RelationshipType of the Relationship",
+            "itemtype": "property",
+            "name": "relationshipType",
+            "type": "{RelationshipType}",
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 392,
+            "description": "Note that this method calls the Relationship's otherInRelationship method",
+            "itemtype": "method",
+            "name": "otherInRelationship",
+            "params": [
+                {
+                    "name": "suspect",
+                    "description": "",
+                    "type": "Suspect"
+                }
+            ],
+            "return": {
+                "description": "if the suspect is in the Relationship, then this returns the other Suspect in the Relationship\notherwise returns false, indicating the given Suspect wasn't in the Relationship",
+                "type": "Suspect/Boolean"
+            },
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 405,
+            "description": "Gets or sets a jQuery string used to locate where the Relationship is displayed in the webpage.\nNote that this method calls the RelationshipView's jQueryLocatorPhrase method.",
+            "itemtype": "method",
+            "name": "jQueryLocatorPhrase",
+            "params": [
+                {
+                    "name": "phrase",
+                    "description": "- (optional) a jQuery string used to locate where the Relationship is displayed in the webpage",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "if phrase is given, the jQueryLocatorPhrase is set, if not given, it is returned",
+                "type": "String"
+            },
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 416,
+            "description": "Checks the current visibility and calls the RelationshipView to either makeVisible or makeInvisible accordingly",
+            "itemtype": "method",
+            "name": "updateVisibilityDisplay",
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 429,
+            "description": "Note that this simply calls the RelationshipView's isVisible method",
+            "itemtype": "method",
+            "name": "isVisible",
+            "return": {
+                "description": "True if the Relationship is currently visible, false if not"
+            },
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 438,
+            "description": "makeVisible - makes the display of the Relationship on the webpage visible\nrelies on \n- a css class called invisible\n- a css class called visible\n- _jQueryLocatorPhrase specifying a place to find this Relationship on the webpage",
+            "params": [
+                {
+                    "name": "visObject",
+                    "description": "An object containing all the stuff to do with the vis node display",
+                    "type": "Object"
+                },
+                {
+                    "name": "callback",
+                    "description": "A function to run on .colorbox after the other makeVisible stuff is done (colorbox is the javascript library that displays the pop up dialog)",
+                    "type": "Function"
+                }
+            ],
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 451,
+            "description": "Figures out if the given Suspect is either the instigator, recipient, or neither, in the Relationship",
+            "itemtype": "method",
+            "name": "suspectInRelationship",
+            "params": [
+                {
+                    "name": "suspect",
+                    "description": "",
+                    "type": "Suspect"
+                }
+            ],
+            "return": {
+                "description": "'instagtor' if the suspect is the instigator in the Relationship\n or 'recipient' if the suspect is the recipient in the Relationship\n or false if the suspect isn't in the Relationship",
+                "type": "String/Boolean"
+            },
+            "class": "RelationshipController"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 477,
+            "description": "This just gives the name of the class so that it can be more easily seen in the debugger.",
+            "itemtype": "property",
+            "name": "aaClassName",
+            "type": "{String}",
+            "default": "\"RelationshipController\"",
+            "class": "RelationshipColletion"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 485,
+            "description": "The number of RelationshipControllers (a proxy for the Relationships) in this collection",
+            "itemtype": "property",
+            "name": "length",
+            "type": "{Number}",
+            "class": "RelationshipColletion"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 493,
+            "itemtype": "method",
+            "name": "getRelationshipType",
+            "return": {
+                "description": "The RelationshipType of the Relationships in this collection",
+                "type": "RelationshipType"
+            },
+            "class": "RelationshipColletion"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 501,
+            "description": "Adds a single RelationshipController to the collection, ensuring there are no duplicates",
+            "itemtype": "method",
+            "name": "addRelationshipController",
+            "params": [
+                {
+                    "name": "rController",
+                    "description": "A RelationshipController to be added to the collection",
+                    "type": "RelationshipController"
+                }
+            ],
+            "class": "RelationshipColletion"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 512,
+            "description": "Adds an array of RelationshipsControllers to the collection, ensuring there are no duplicates, based on the given array of Relationships",
+            "itemtype": "method",
+            "name": "addRelationshipControllers",
+            "params": [
+                {
+                    "name": "relationshipArray",
+                    "description": "An array of Relationship objects to be added to the collection",
+                    "type": "Array"
+                }
+            ],
+            "class": "RelationshipColletion"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 529,
+            "itemtype": "method",
+            "name": "getRelationshipControllers",
+            "return": {
+                "description": "An Array of RelationshipControllers held in this collection",
+                "type": "Array"
+            },
+            "class": "RelationshipColletion"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 555,
+            "description": "Goes thru the suspectsArray and randomly assign relationships, returning an array of those Relationships",
+            "itemtype": "method",
+            "name": "assignRandomRelationships",
+            "params": [
+                {
+                    "name": "suspectCollection",
+                    "description": "The collection of suspects in this game, for which random Relationships will be created",
+                    "type": "SuspectCollection"
+                },
+                {
+                    "name": "relationshipType",
+                    "description": "The type of relationship to randomly create",
+                    "type": "RelationshipType"
+                }
+            ],
+            "return": {
+                "description": "-  An array of Relationships of the given RelationshipType",
+                "type": "Array"
+            },
+            "class": "RelationshipCalculatorInterface"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 567,
+            "description": "Figures out  the enemies of the \"Suspect\" who has been murdred (the victim)",
+            "itemtype": "method",
+            "name": "findEnemies",
+            "params": [
+                {
+                    "name": "victim",
+                    "description": "The \"Suspect\" who has been murdered, for whom to identify enemies",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "suspectCollection",
+                    "description": "The singleton holding the collection of Suspects",
+                    "type": "SuspectCollection"
+                }
+            ],
+            "return": {
+                "description": "An array of Suspects who are enemies of the victim",
+                "type": "Array"
+            },
+            "class": "RelationshipCalculatorInterface"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 579,
+            "description": "When a Suspect is \"questioned\" the Suspect may or may not reveal a Relationship they are in.",
+            "itemtype": "method",
+            "name": "revealRelationshipUnderQuestioning",
+            "return": {
+                "description": "true if the Suspect will reveal the Relationship, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "RelationshipCalculatorInterface"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 601,
+            "description": "Goes thru the suspectsArray and randomly assign relationships, returning an array of those Relationships",
+            "itemtype": "method",
+            "name": "assignRandomRelationships",
+            "params": [
+                {
+                    "name": "suspectCollection",
+                    "description": "The collection of suspects in this game, for which random Relationships will be created",
+                    "type": "SuspectCollection"
+                },
+                {
+                    "name": "relationshipType",
+                    "description": "The type of relationship to randomly create",
+                    "type": "RelationshipType"
+                }
+            ],
+            "return": {
+                "description": "-  An array of Relationships of the given RelationshipType",
+                "type": "Array"
+            },
+            "class": "MarriageRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 643,
+            "description": "Figures out  the enemies of the \"Suspect\" who has been murdred (the victim)",
+            "itemtype": "method",
+            "name": "findEnemies",
+            "params": [
+                {
+                    "name": "victim",
+                    "description": "The \"Suspect\" who has been murdered, for whom to identify enemies",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "suspectCollection",
+                    "description": "The singleton holding the collection of Suspects",
+                    "type": "SuspectCollection"
+                }
+            ],
+            "return": {
+                "description": "An array of Suspects who are enemies of the victim",
+                "type": "Array"
+            },
+            "class": "MarriageRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 656,
+            "description": "When a Suspect is \"questioned\" the Suspect may or may not reveal a Relationship they are in.",
+            "itemtype": "method",
+            "name": "revealRelationshipUnderQuestioning",
+            "return": {
+                "description": "true if the Suspect will reveal the Relationship, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "MarriageRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 679,
+            "description": "Goes thru the suspectsArray and randomly assign relationships, returning an array of those Relationships",
+            "itemtype": "method",
+            "name": "assignRandomRelationships",
+            "params": [
+                {
+                    "name": "suspectCollection",
+                    "description": "The collection of suspects in this game, for which random Relationships will be created",
+                    "type": "SuspectCollection"
+                },
+                {
+                    "name": "relationshipType",
+                    "description": "The type of relationship to randomly create",
+                    "type": "RelationshipType"
+                }
+            ],
+            "return": {
+                "description": "-  An array of Relationships of the given RelationshipType",
+                "type": "Array"
+            },
+            "class": "AffairRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 731,
+            "description": "Figures out  the enemies of the \"Suspect\" who has been murdred (the victim)",
+            "itemtype": "method",
+            "name": "findEnemies",
+            "params": [
+                {
+                    "name": "victim",
+                    "description": "The \"Suspect\" who has been murdered, for whom to identify enemies",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "suspectCollection",
+                    "description": "The singleton holding the collection of Suspects",
+                    "type": "SuspectCollection"
+                }
+            ],
+            "return": {
+                "description": "An array of Suspects who are enemies of the victim",
+                "type": "Array"
+            },
+            "class": "AffairRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 768,
+            "description": "When a Suspect is \"questioned\" the Suspect may or may not reveal a Relationship they are in.",
+            "itemtype": "method",
+            "name": "revealRelationshipUnderQuestioning",
+            "return": {
+                "description": "true if the Suspect will reveal the Relationship, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "AffairRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 789,
+            "description": "Goes thru the suspectsArray and randomly assign relationships, returning an array of those Relationships",
+            "itemtype": "method",
+            "name": "assignRandomRelationships",
+            "params": [
+                {
+                    "name": "suspectCollection",
+                    "description": "The collection of suspects in this game, for which random Relationships will be created",
+                    "type": "SuspectCollection"
+                },
+                {
+                    "name": "relationshipType",
+                    "description": "The type of relationship to randomly create",
+                    "type": "RelationshipType"
+                }
+            ],
+            "return": {
+                "description": "-  An array of Relationships of the given RelationshipType",
+                "type": "Array"
+            },
+            "class": "BlackmailRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 882,
+            "description": "Figures out  the enemies of the \"Suspect\" who has been murdred (the victim)",
+            "itemtype": "method",
+            "name": "findEnemies",
+            "params": [
+                {
+                    "name": "victim",
+                    "description": "The \"Suspect\" who has been murdered, for whom to identify enemies",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "suspectCollection",
+                    "description": "The singleton holding the collection of Suspects",
+                    "type": "SuspectCollection"
+                }
+            ],
+            "return": {
+                "description": "An array of Suspects who are enemies of the victim",
+                "type": "Array"
+            },
+            "class": "BlackmailRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 905,
+            "description": "When a Suspect is \"questioned\" the Suspect may or may not reveal a Relationship they are in.",
+            "itemtype": "method",
+            "name": "revealRelationshipUnderQuestioning",
+            "return": {
+                "description": "true if the Suspect will reveal the Relationship, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "BlackmailRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 927,
+            "description": "Goes thru the suspectsArray and randomly assign relationships, returning an array of those Relationships",
+            "itemtype": "method",
+            "name": "assignRandomRelationships",
+            "params": [
+                {
+                    "name": "suspectCollection",
+                    "description": "The collection of suspects in this game, for which random Relationships will be created",
+                    "type": "SuspectCollection"
+                },
+                {
+                    "name": "relationshipType",
+                    "description": "The type of relationship to randomly create",
+                    "type": "RelationshipType"
+                }
+            ],
+            "return": {
+                "description": "-  An array of Relationships of the given RelationshipType",
+                "type": "Array"
+            },
+            "class": "InheritanceRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 960,
+            "description": "Figures out  the enemies of the \"Suspect\" who has been murdred (the victim)",
+            "itemtype": "method",
+            "name": "findEnemies",
+            "params": [
+                {
+                    "name": "victim",
+                    "description": "The \"Suspect\" who has been murdered, for whom to identify enemies",
+                    "type": "Suspect"
+                },
+                {
+                    "name": "suspectCollection",
+                    "description": "The singleton holding the collection of Suspects",
+                    "type": "SuspectCollection"
+                }
+            ],
+            "return": {
+                "description": "An array of Suspects who are enemies of the victim",
+                "type": "Array"
+            },
+            "class": "InheritanceRelationshipCalculator"
+        },
+        {
+            "file": "mmrelationships.js",
+            "line": 983,
+            "description": "When a Suspect is \"questioned\" the Suspect may or may not reveal a Relationship they are in.",
+            "itemtype": "method",
+            "name": "revealRelationshipUnderQuestioning",
+            "return": {
+                "description": "true if the Suspect will reveal the Relationship, false otherwise",
+                "type": "Boolean"
+            },
+            "class": "InheritanceRelationshipCalculator"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 20,
+            "description": "This just gives the name of the class so that it can be more easily seen in the debugger.",
+            "itemtype": "property",
+            "name": "aaClassName",
+            "type": "{String}",
+            "default": "\"Suspect\"",
+            "class": "Suspect"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 28,
+            "description": "A unique identifier of the Suspect. This is also the position of the Suspect in the suspectsArray",
+            "itemtype": "property",
+            "name": "id",
+            "type": "{Number}",
+            "class": "Suspect"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 35,
+            "description": "The Suspect's name",
+            "itemtype": "property",
+            "name": "name",
+            "type": "{String}",
+            "class": "Suspect"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 42,
+            "description": "The url of an image of the Suspect",
+            "itemtype": "property",
+            "name": "img",
+            "type": "{String}",
+            "class": "Suspect"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 50,
+            "description": "Gets or sets the jQuery string used to locate the the cell this Suspect is displayed in, within the header row along the top of the table",
+            "itemtype": "method",
+            "name": "headerLocatorPhrase",
+            "params": [
+                {
+                    "name": "phrase",
+                    "description": "the jQuery string (optional)",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "if phrase isn't given, the headerLocatorPhrase is returned",
+                "type": "String"
+            },
+            "class": "Suspect"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 88,
+            "description": "private vairables",
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 101,
+            "description": "private methods",
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 131,
+            "description": "public methods",
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 136,
+            "description": "This just gives the name of the class so that it can be more easily seen in the debugger.",
+            "itemtype": "property",
+            "name": "aaClassName",
+            "type": "{String}",
+            "default": "\"SuspectCollection\"",
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 144,
+            "itemtype": "method",
+            "name": "getVictim",
+            "return": {
+                "description": "the Suspect who is the murder victim",
+                "type": "Suspect"
+            },
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 152,
+            "itemtype": "method",
+            "name": "setVictim",
+            "params": [
+                {
+                    "name": "victim",
+                    "description": "Sets this Suspect as the murder victim",
+                    "type": "Suspect"
+                }
+            ],
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 160,
+            "itemtype": "method",
+            "name": "getMurderer",
+            "return": {
+                "description": "the Suspect who is the murderer",
+                "type": "Suspect"
+            },
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 168,
+            "itemtype": "method",
+            "name": "setMurderer",
+            "params": [
+                {
+                    "name": "murderer",
+                    "description": "Sets this Suspect as the murderer",
+                    "type": "Suspect"
+                }
+            ],
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 176,
+            "itemtype": "method",
+            "name": "getSuspectsArray",
+            "return": {
+                "description": "The Array of all the Suspects in the game",
+                "type": "Array"
+            },
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 184,
+            "description": "relationshipCollections is a hash where each entry is a RelationshipCollection of a particular RelationshipType, like this:\nrelationshipCollections = {\n\tmarriages : {}, \n\taffairs : {},\n\tblackmails : {},\n\tinheritances : {}\n}",
+            "itemtype": "method",
+            "name": "getRelationshipCollections",
+            "return": {
+                "description": "A hash where each entry is a RelationshipCollection of a particular RelationshipType",
+                "type": "Object"
+            },
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 201,
+            "description": "Initializes the RelationshipCollections and list of Suspects",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "nameList",
+                    "description": "An Array of Suspect names. Optional - if not given then a default namelist (of famous people) will be used",
+                    "type": "Array"
+                }
+            ],
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 212,
+            "description": "Initializes the list of Suspects",
+            "itemtype": "method",
+            "name": "initializeSuspects",
+            "params": [
+                {
+                    "name": "nameList",
+                    "description": "An Array of Suspect names. Optional - if not given then a default namelist (of famous people) will be used",
+                    "type": "Array"
+                }
+            ],
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 228,
+            "description": "Randomly creates Relationships for all the RelationshipTypes in the relationshipCollections",
+            "itemtype": "method",
+            "name": "assignRandomRelationships",
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 256,
+            "description": "Randomly assigns one of the Suspects in the suspectsArray to be the murder victim",
+            "itemtype": "method",
+            "name": "assignRandomVictim",
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 266,
+            "description": "Randomly assigns one of the Suspects in the suspectsArray to be the murderer",
+            "itemtype": "method",
+            "name": "assignMurderer",
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "mmsuspects.js",
+            "line": 291,
+            "description": "Finds Relationsships that the given Suspect is involved in",
+            "itemtype": "method",
+            "name": "findRelationshipsForSuspect",
+            "params": [
+                {
+                    "name": "suspect",
+                    "description": "The Suspect to find Relationships for",
+                    "type": "Suspect"
+                }
+            ],
+            "return": {
+                "description": "An array of Relationships from the relationshipCollections, that involve the given Suspect",
+                "type": "Array"
+            },
+            "class": "SuspectCollection"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 93,
+            "description": "After the #cboxContent div is updated to display some specific information about a Relationship, this adds some common formatting for",
+            "itemtype": "method",
+            "name": "additionalColorboxFormatting",
+            "params": [
+                {
+                    "name": "className",
+                    "description": "An optional css class to apply to the #cboxContent div",
+                    "type": "String"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 113,
+            "description": "Displays a row with cells for one for each Suspect name, where each cell is clickable to \"question\" that Suspect",
+            "itemtype": "method",
+            "name": "displaySuspectHeader",
+            "access": "private",
+            "tagname": "",
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 153,
+            "description": "Displays a series of blank rows, one for each suspect, each row to be the length of the number of suspects, \nplus one for the column containing the suspects' names",
+            "itemtype": "method",
+            "name": "displaySuspectRows",
+            "access": "private",
+            "tagname": "",
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 192,
+            "description": "Initializes vis, the javascript library that displays the animated network of nodes",
+            "itemtype": "method",
+            "name": "initVis",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "A dictionary with a variety of things needed for running the vis node",
+                "type": "Object"
+            },
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 227,
+            "description": "A dictionary that contains various data needed to create the display of a network of nodes (using the vis library). \nspecifically this looks like:\n{\n\t'visNodes' : _visNodes, \n\t'visEdges' : _visEdges, \n\t'visContainer' : _visContainer, \n\t'visData' : _visData, \n\t'visOptions' : _visOptions, \n\t'visNetwork' : _visNetwork, \n\t'nextVisId' : _nextVisId\n}",
+            "itemtype": "property",
+            "name": "visObject",
+            "type": "{Object}",
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 245,
+            "description": "Initialize the game: creates the Suspects list and their randomized Relationships, then assigns a Victim and a Murderer",
+            "itemtype": "method",
+            "name": "init",
+            "return": {
+                "description": "suspectCollection A collection of the Suspects in the game",
+                "type": "SuspectCollection"
+            },
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 284,
+            "description": "Erase the display of all suspects",
+            "itemtype": "method",
+            "name": "clearGameBoard",
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 302,
+            "description": "Displays the new, blank game board",
+            "itemtype": "method",
+            "name": "createGameBoard",
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 314,
+            "description": "Puts the Relationships between the Suspects into the game board, albeit hidden initially",
+            "itemtype": "method",
+            "name": "populateGameBoard",
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 381,
+            "description": "When one of the Suspect names is clicked, it is representing questioning that suspect. A Relationship that the Suspect is involved in might be shown. This method handles all that",
+            "itemtype": "method",
+            "name": "questionSuspect",
+            "params": [
+                {
+                    "name": "evt",
+                    "description": "The objct that was clicked to trigger calling this method",
+                    "type": "Object"
+                }
+            ],
+            "class": "gameController",
+            "module": "gameController"
+        },
+        {
+            "file": "murdermystery.js",
+            "line": 442,
+            "description": "When one of the cells for the Relationships is clicked a Relationship that involves the 2 Suspects given by the grid location might be shown.\nThis is not being used currently",
+            "itemtype": "method",
+            "name": "questionRelationship",
+            "params": [
+                {
+                    "name": "evt",
+                    "description": "The objct that was clicked to trigger calling this method",
+                    "type": "Object"
+                }
+            ],
+            "class": "gameController",
+            "module": "gameController"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " jquery-2.1.1.js:846"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " jquery-2.1.1.js:910"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " jquery-2.1.1.js:983"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " jquery-2.1.1.js:995"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " jquery-2.1.1.js:1007"
+        },
+        {
+            "message": "Missing item type\nCreate key-value caches of limited size",
+            "line": " jquery-2.1.1.js:846"
+        },
+        {
+            "message": "Missing item type\nMark a function for special use by Sizzle",
+            "line": " jquery-2.1.1.js:866"
+        },
+        {
+            "message": "Missing item type\nSupport testing using an element",
+            "line": " jquery-2.1.1.js:875"
+        },
+        {
+            "message": "Missing item type\nAdds the same handler for all of the specified attrs",
+            "line": " jquery-2.1.1.js:896"
+        },
+        {
+            "message": "Missing item type\nChecks document order of two siblings",
+            "line": " jquery-2.1.1.js:910"
+        },
+        {
+            "message": "Missing item type\nReturns a function to use in pseudos for input types",
+            "line": " jquery-2.1.1.js:939"
+        },
+        {
+            "message": "Missing item type\nReturns a function to use in pseudos for buttons",
+            "line": " jquery-2.1.1.js:950"
+        },
+        {
+            "message": "Missing item type\nReturns a function to use in pseudos for positionals",
+            "line": " jquery-2.1.1.js:961"
+        },
+        {
+            "message": "Missing item type\nChecks a node for validity as a Sizzle context",
+            "line": " jquery-2.1.1.js:983"
+        },
+        {
+            "message": "Missing item type\nDetects XML nodes",
+            "line": " jquery-2.1.1.js:995"
+        },
+        {
+            "message": "Missing item type\nSets document-related variables once based on the current document",
+            "line": " jquery-2.1.1.js:1007"
+        },
+        {
+            "message": "Missing item type\nDocument sorting and removing duplicates",
+            "line": " jquery-2.1.1.js:1440"
+        },
+        {
+            "message": "Missing item type\nUtility function for retrieving the text value of an array of DOM nodes",
+            "line": " jquery-2.1.1.js:1473"
+        },
+        {
+            "message": "Missing item type\nA low-level selection function that works with Sizzle's compiled\n selector functions",
+            "line": " jquery-2.1.1.js:2440"
+        },
+        {
+            "message": "Missing item type\nThe ready event handler and self cleanup method",
+            "line": " jquery-2.1.1.js:3401"
+        },
+        {
+            "message": "Missing item type\nDetermines whether an object can have data",
+            "line": " jquery-2.1.1.js:3494"
+        },
+        {
+            "message": "Missing item type\nRetrieve the actual display of a element",
+            "line": " jquery-2.1.1.js:5454"
+        },
+        {
+            "message": "Missing item type\nTry to determine the default display value of an element",
+            "line": " jquery-2.1.1.js:5478"
+        },
+        {
+            "message": "Missing item type\nLoad a url into a page",
+            "line": " jquery-2.1.1.js:8823"
+        },
+        {
+            "message": "Missing item type\nGets a window from an element",
+            "line": " jquery-2.1.1.js:8897"
+        },
+        {
+            "message": "Missing item type\nprivate variables",
+            "line": " mmrelationships.js:184"
+        },
+        {
+            "message": "Missing item type\nprivate methods",
+            "line": " mmrelationships.js:194"
+        },
+        {
+            "message": "Missing item type\npublic",
+            "line": " mmrelationships.js:208"
+        },
+        {
+            "message": "Missing item type\nmakeVisible - makes the display of the Relationship on the webpage visible\nrelies on \n- a css class called invisible\n- a css class called visible\n- _jQueryLocatorPhrase specifying a place to find this Relationship on the webpage",
+            "line": " mmrelationships.js:438"
+        },
+        {
+            "message": "Missing item type\nprivate vairables",
+            "line": " mmsuspects.js:88"
+        },
+        {
+            "message": "Missing item type\nprivate methods",
+            "line": " mmsuspects.js:101"
+        },
+        {
+            "message": "Missing item type\npublic methods",
+            "line": " mmsuspects.js:131"
+        }
+    ]
+}

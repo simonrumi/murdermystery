@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>gameController</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/AffairRelationshipCalculator.html">AffairRelationshipCalculator</a></li>
+                                <li><a href="../classes/BlackmailRelationshipCalculator.html">BlackmailRelationshipCalculator</a></li>
+                                <li><a href="../classes/gameController.html">gameController</a></li>
+                                <li><a href="../classes/InheritanceRelationshipCalculator.html">InheritanceRelationshipCalculator</a></li>
+                                <li><a href="../classes/MarriageRelationshipCalculator.html">MarriageRelationshipCalculator</a></li>
+                                <li><a href="../classes/Relationship.html">Relationship</a></li>
+                                <li><a href="../classes/RelationshipCalculatorInterface.html">RelationshipCalculatorInterface</a></li>
+                                <li><a href="../classes/RelationshipColletion.html">RelationshipColletion</a></li>
+                                <li><a href="../classes/RelationshipController.html">RelationshipController</a></li>
+                                <li><a href="../classes/RelationshipType.html">RelationshipType</a></li>
+                                <li><a href="../classes/RelationshipView.html">RelationshipView</a></li>
+                                <li><a href="../classes/Suspect.html">Suspect</a></li>
+                                <li><a href="../classes/SuspectCollection.html">SuspectCollection</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/gameController.html">gameController</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>gameController Class</h1>
+<div class="box meta">
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/murdermystery.js.html#l221"><code>murdermystery.js:221</code></a>
+        </div>
+
+            Module: <a href="../modules/gameController.html">gameController</a>
+
+</div>
+
+
+<div class="box intro">
+    <p>Public methods of gameController</p>
+
+</div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method private">
+                                <a href="#method_additionalColorboxFormatting">additionalColorboxFormatting</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_clearGameBoard">clearGameBoard</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_createGameBoard">createGameBoard</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_displaySuspectHeader">displaySuspectHeader</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_displaySuspectRows">displaySuspectRows</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_init">init</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_initVis">initVis</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_populateGameBoard">populateGameBoard</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_questionRelationship">questionRelationship</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_questionSuspect">questionSuspect</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                            <li class="index-item property">
+                                <a href="#property_visObject">visObject</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_additionalColorboxFormatting" class="method item private">
+    <h3 class="name"><code>additionalColorboxFormatting</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>className</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l93"><code>murdermystery.js:93</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>After the #cboxContent div is updated to display some specific information about a Relationship, this adds some common formatting for</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">className</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>An optional css class to apply to the #cboxContent div</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_clearGameBoard" class="method item">
+    <h3 class="name"><code>clearGameBoard</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l284"><code>murdermystery.js:284</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Erase the display of all suspects</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_createGameBoard" class="method item">
+    <h3 class="name"><code>createGameBoard</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l302"><code>murdermystery.js:302</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Displays the new, blank game board</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_displaySuspectHeader" class="method item private">
+    <h3 class="name"><code>displaySuspectHeader</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l113"><code>murdermystery.js:113</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Displays a row with cells for one for each Suspect name, where each cell is clickable to &quot;question&quot; that Suspect</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_displaySuspectRows" class="method item private">
+    <h3 class="name"><code>displaySuspectRows</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l153"><code>murdermystery.js:153</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Displays a series of blank rows, one for each suspect, each row to be the length of the number of suspects, 
+plus one for the column containing the suspects&#39; names</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_init" class="method item">
+    <h3 class="name"><code>init</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/SuspectCollection.html" class="crosslink">SuspectCollection</a></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l245"><code>murdermystery.js:245</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Initialize the game: creates the Suspects list and their randomized Relationships, then assigns a Victim and a Murderer</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type"><a href="../classes/SuspectCollection.html" class="crosslink">SuspectCollection</a></span>:
+                    <p>suspectCollection A collection of the Suspects in the game</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_initVis" class="method item private">
+    <h3 class="name"><code>initVis</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l192"><code>murdermystery.js:192</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Initializes vis, the javascript library that displays the animated network of nodes</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>A dictionary with a variety of things needed for running the vis node</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_populateGameBoard" class="method item">
+    <h3 class="name"><code>populateGameBoard</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l314"><code>murdermystery.js:314</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Puts the Relationships between the Suspects into the game board, albeit hidden initially</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_questionRelationship" class="method item">
+    <h3 class="name"><code>questionRelationship</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>evt</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l442"><code>murdermystery.js:442</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>When one of the cells for the Relationships is clicked a Relationship that involves the 2 Suspects given by the grid location might be shown.
+This is not being used currently</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">evt</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The objct that was clicked to trigger calling this method</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_questionSuspect" class="method item">
+    <h3 class="name"><code>questionSuspect</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>evt</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/murdermystery.js.html#l381"><code>murdermystery.js:381</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>When one of the Suspect names is clicked, it is representing questioning that suspect. A Relationship that the Suspect is involved in might be shown. This method handles all that</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">evt</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The objct that was clicked to trigger calling this method</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+            </div>
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                    <div id="property_visObject" class="property item">
+                        <h3 class="name"><code>visObject</code></h3>
+                        <span class="type">Object</span>
+                    
+                    
+                    
+                    
+                    
+                        <div class="meta">
+                                    <p>
+                                    Defined in
+                            <a href="../files/murdermystery.js.html#l227"><code>murdermystery.js:227</code></a>
+                            </p>
+                    
+                    
+                        </div>
+                    
+                        <div class="description">
+                            <p>A dictionary that contains various data needed to create the display of a network of nodes (using the vis library). 
+                    specifically this looks like:
+                    {
+                        &#39;visNodes&#39; : _visNodes, 
+                        &#39;visEdges&#39; : _visEdges, 
+                        &#39;visContainer&#39; : _visContainer, 
+                        &#39;visData&#39; : _visData, 
+                        &#39;visOptions&#39; : _visOptions, 
+                        &#39;visNetwork&#39; : _visNetwork, 
+                        &#39;nextVisId&#39; : _nextVisId
+                    }</p>
+                    
+                        </div>
+                    
+                    
+                    
+                    </div>
+            </div>
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
