@@ -507,17 +507,6 @@ $(document).ready(function() {
 	gameController.populateGameBoard();
 	
 	
-	$('.playerform').submit( function (evt) {
-		evt.preventDefault();
-		alert( $("input:text").val() );
-	});
-	
-	$('.playername').change( function (evt) {
-		evt.preventDefault();
-		alert( $("input:text").val() );
-	});
-	
-	
 	/*
 	* clickable buttons start here
 	*/
