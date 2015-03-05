@@ -1,5 +1,5 @@
 # murder mystery
-This is a single-page web-app game inspired by the classic board game "Clue" (Or "Cluedo" if you're outside the US).
+This is a work in progress and is not currently complete - it's a single-page web-app game inspired by the classic board game "Clue" (Or "Cluedo" if you're outside the US).
 
 There are a number of suspects - as of the time of writing these are a random bunch of famous people - and when the game is started one is murdered, and one is the murderer.
 
