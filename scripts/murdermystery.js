@@ -12,27 +12,25 @@ function log(message) {
 }
 
 /*
-* global switch for running test functions or not
-*/
-var testing = false;
-
-/*
 *global variables for the murder mystery logic stored here
 */
 var MMVars = {
 	// some default Suspects. (Big) TODO - allow user to enter their own Suspects using Facebook
 	SuspectNames : ['Barak Obama','Jet Li','David Bowie','Gwen Stefani','Marie Curie','Jane Austen','Taylor Swift','Liam Neeson'],
 	SuspectImages : ['img/BarackObama.jpg','img/JetLi.jpg','img/DavidBowie.jpg','img/GwenStefani.jpg','img/MarieCurie.jpg','img/JaneAusten.jpg','img/TaylorSwift.jpg','img/LiamNeeson.jpg'],
-	
+
 	//the minimum number of Relationships (between Suspects) in a game - use this for game balancing
 	MINIMUM_RELATIONSHIPS : 7,
+
+	// if using the vis node diagram in the display, set this to true. At the moment the display is too messy with it in, so not showing it
+	showVisDiagram : false
 }
 
 
 /*
 * postJQueryCallback
 * used for executing callbacks after jQuery updates.
-*/	
+*/
 jQuery.fn.postJQueryCallback = function (callback, param1) {
 	if (callback) {
 		callback(param1);
@@ -48,7 +46,7 @@ var generateRandomBool = function(weight) {
 	if (!weight) {
 		weight = 0.5;
 	}
-	
+
 	if ( Math.random() >= weight ) {
 		return true;
 	} else {
@@ -56,10 +54,10 @@ var generateRandomBool = function(weight) {
 	}
 }
 
-/**
+/*******************************************************
 * The gameController is the module that runs all the game logic
 * @module gameController
-*/
+********************************************************/
 var gameController = (function() {
 	/* *******************
 	* private variables
@@ -68,8 +66,8 @@ var gameController = (function() {
 	var victimHasEnemies;
 	var suspectsList;
 	var rCollections;
-	
-	
+
+
 	// vis stuff
 	var _visNodes;
 	var _visEdges;
@@ -79,9 +77,9 @@ var gameController = (function() {
 	var _visNetwork;
 	var _nextVisId;
 	var _visObject;
-	
-	
-	
+
+
+
 	/* *******************
 	* private methods
 	* ********************/
@@ -89,9 +87,9 @@ var gameController = (function() {
 	var displaySuspectHeader;
 	var displaySuspectRows;
 	var initVis;
-	
+
 	/**
-	* After the #cboxContent div is updated to display some specific information about a Relationship, this adds some common formatting for  
+	* After the #cboxContent div is updated to display some specific information about a Relationship, this adds some common formatting for
 	* @method additionalColorboxFormatting
 	* @param {String} className An optional css class to apply to the #cboxContent div
 	* @private
@@ -99,19 +97,19 @@ var gameController = (function() {
 	additionalColorboxFormatting = function (className) {
 		// close the colorbox when the user clicks on it anywhere
 		$('#cboxContent').click( function() { $.colorbox.close(); } );
-		
+
 		//clear out any old class names
 		$('#cboxContent').removeClass();
-		
+
 		//after the colorbox is updated, set the style of the #cboxContent div
 		if (className) {
 			$('#cboxContent').addClass(className);
 		}
 		$('#cboxContent').addClass('popUpDialog');
 	}
-		
+
 	/**
-	* Displays a row with cells for one for each Suspect name, where each cell is clickable to "question" that Suspect 
+	* Displays a row with cells for one for each Suspect name, where each cell is clickable to "question" that Suspect
 	* @method displaySuspectHeader
 	* @private
 	*/
@@ -121,62 +119,61 @@ var gameController = (function() {
 		var row;
 		var column;
 		var jQueryLocatorPhrase;
-		
+
 		// first make the row along the top with the first cell blank, since that blank cell will be the top of the column where the vertical suspect names are put
 		$('#suspects').append( $('<tr></tr>').append( $('<td></td>') ) );
-		
-		// next iterate through the suspects and enter them in the next cells in the top row		
+
+		// next iterate through the suspects and enter them in the next cells in the top row
 		for (i in suspectsList) {
 			$('#suspects').find('tr:last').append( $('<td></td>').text(suspectsList[i].name) );
-			
+
 			column = i;
 			column++;
 			jQueryLocatorPhrase = '#suspects > tbody > tr:eq(0) > td:eq(' + column + ')';
 			$(jQueryLocatorPhrase).addClass('suspect');
-			
+
 			// add the clickableHeader class
 			$(jQueryLocatorPhrase).addClass('clickableHeader');
-			
+
 			// add an attribute indicating the id of this Suspect in the suspectsList
 			$(jQueryLocatorPhrase).attr('data-recipientid',i);
-			
+
 			// if the suspect is the victim, add the victim class
 			if ( suspectsList[i] == suspectCollection.getVictim() ) {;
 				$(jQueryLocatorPhrase).addClass('victim');
 			}
-			
+
 			suspectsList[i].headerLocatorPhrase(jQueryLocatorPhrase);
 		}
 	}
-	
-	
+
 	/**
-	* Displays a series of blank rows, one for each suspect, each row to be the length of the number of suspects, 
-	* plus one for the column containing the suspects' names 
+	* Displays a series of blank rows, one for each suspect, each row to be the length of the number of suspects,
+	* plus one for the column containing the suspects' names
 	* @method displaySuspectRows
 	* @private
 	*/
 	displaySuspectRows = function () {
 		var i;
 		var j;
-		
-		// 
+
+		//
 		for (i in suspectsList) {
 			//first make the row with the first column containing the current suspect's name
 			$('#suspects').append( $('<tr></tr>').append( $('<td></td>').text(suspectsList[i].name) ) );
 			$('#suspects').find('tr:last td:last').addClass('suspect');
 			$('#suspects').find('tr:last td:last').addClass('headerColumn');
-			
+
 			// add the clickableHeader class
 			// $('#suspects').find('tr:last td:last').addClass('clickableHeader');
-			
+
 			// add an attribute indicating the id of this Suspect in the suspectsList
 			$('#suspects').find('tr:last td:last').attr('data-instigatorid',i);
-			
+
 			//then make additional columns, one for each suspect in the suspectsList
 			for (j in suspectsList) {
 				$('#suspects').find('tr:last').append( $('<td></td>') );
-				
+
 				// if we're within  the triangle of displayable relationships, indicate that
 				if (j>i) {
 					$('#suspects').find('tr:last td:last').addClass('unknownRelationship');
@@ -185,12 +182,11 @@ var gameController = (function() {
 				$('#suspects').find('tr:last td:last').attr('data-recipientid',i);
 				$('#suspects').find('tr:last td:last').attr('data-instigatorid',j);
 			}
-		}	
+		}
 	}
-	
-	
+
 	/**
-	* Initializes vis, the javascript library that displays the animated network of nodes 
+	* Initializes vis, the javascript library that displays the animated network of nodes
 	* @method initVis
 	* @private
 	* @return {Object} A dictionary with a variety of things needed for running the vis node
@@ -206,34 +202,34 @@ var gameController = (function() {
 			physics: {}
 		};
 		_nextVisId = 100;
-		
+
 		return {
-			'visNodes' : _visNodes, 
-			'visEdges' : _visEdges, 
-			'visContainer' : _visContainer, 
-			'visData' : _visData, 
-			'visOptions' : _visOptions, 
-			'visNetwork' : _visNetwork, 
+			'visNodes' : _visNodes,
+			'visEdges' : _visEdges,
+			'visContainer' : _visContainer,
+			'visData' : _visData,
+			'visOptions' : _visOptions,
+			'visNetwork' : _visNetwork,
 			'nextVisId' : _nextVisId
 		}
 	}
-	
+
 	/********************
 	* This entry is here to show the public methods of the gameController module
 	* @class gameController
 	*/
 	return {
-		
+
 		/**
-		* A dictionary that contains various data needed to create the display of a network of nodes (using the vis library). 
+		* A dictionary that contains various data needed to create the display of a network of nodes (using the vis library).
 		* specifically this looks like:
 		* {
-		*	'visNodes' : _visNodes, 
-		*	'visEdges' : _visEdges, 
-		*	'visContainer' : _visContainer, 
-		*	'visData' : _visData, 
-		*	'visOptions' : _visOptions, 
-		*	'visNetwork' : _visNetwork, 
+		*	'visNodes' : _visNodes,
+		*	'visEdges' : _visEdges,
+		*	'visContainer' : _visContainer,
+		*	'visData' : _visData,
+		*	'visOptions' : _visOptions,
+		*	'visNetwork' : _visNetwork,
 		*	'nextVisId' : _nextVisId
 		* }
 		*
@@ -241,7 +237,7 @@ var gameController = (function() {
 		* @type {Object}
 		*/
 		visObject : _visObject,
-		
+
 		/**
 		* Initialize the game: creates the Suspects list and their randomized Relationships, then assigns a Victim and a Murderer
 		* @method init
@@ -253,64 +249,49 @@ var gameController = (function() {
 			suspectsList = suspectCollection.getSuspectsArray();
 			rCollections = suspectCollection.getRelationshipCollections();
 			suspectCollection.init();
-			_visObject = initVis();
-			
-			
-			
-			if (testing) {
-				// TODO create these
-				assignTestMarriages();
-				assignTestAffairs();
-				assignTestBlackmails();
-				assignTestInheritances();
-				assignTestVictim();
-				assignMurderer();
-				
-			} else {
-				
-				suspectCollection.assignRandomRelationships();
-				
-				while (!victimHasEnemies) {
-					suspectCollection.assignRandomVictim();
-					victimHasEnemies = suspectCollection.assignMurderer();
-				}
-				
+			if (MMVars.showVisDiagram) {
+				_visObject = initVis();
 			}
-			return suspectCollection;	
-				
+			suspectCollection.assignRandomRelationships();
+			while (!victimHasEnemies) {
+				suspectCollection.assignRandomVictim();
+				victimHasEnemies = suspectCollection.assignMurderer();
+			}
+			return suspectCollection;
 		}, //end init
-		
-		
+
 		/**
 		* Erase the display of all suspects
-		* @method clearGameBoard 
+		* @method clearGameBoard
 		*/
 		clearGameBoard : function() {
 			$('#suspects').empty();
-			_visObject = initVis();
-			
-			_visObject.visData = {
-				nodes: _visObject.visNodes,
-				edges: _visObject.visEdges,
-			};
-			
-			_visObject.visContainer = document.getElementById('mynetwork');
-			
-			_visObject.visNetwork = new vis.Network(_visObject.visContainer, _visObject.visData, _visObject.visOptions);
+
+			if (MMVars.showVisDiagram) {
+				_visObject = initVis();
+				_visObject.visData = {
+					nodes: _visObject.visNodes,
+					edges: _visObject.visEdges,
+				};
+				_visObject.visContainer = document.getElementById('mynetwork');
+				_visObject.visNetwork = new vis.Network(_visObject.visContainer, _visObject.visData, _visObject.visOptions);
+			}
 		},
-		
+
 		/**
 		* Displays the new, blank game board
 		* @method createGameBoard
 		*/
-		createGameBoard : function() {	
-			displaySuspectHeader();		
+		createGameBoard : function() {
+			displaySuspectHeader();
 			displaySuspectRows();
-			
+
 			//intialize the vis (network display) container
-			_visObject.visContainer = document.getElementById('mynetwork');
+			if (MMVars.showVisDiagram) {
+				_visObject.visContainer = document.getElementById('mynetwork');
+			}
 		}, // end createGameBoard
-		
+
 		/**
 		* Puts the Relationships between the Suspects into the game board, albeit hidden initially
 		* @method populateGameBoard
@@ -323,16 +304,16 @@ var gameController = (function() {
 			var temp;
 			var jQueryLocatorPhrase;
 			var position;
-			
+
 			// go through all the Relationships and put them in the appropriate cells in the table
 			for (i in rCollections) {
 				for (j in rCollections[i].getRelationshipControllers()) {
 					row = suspectsList.indexOf( rCollections[i].getRelationshipControllers()[j].instigator );
 					row++; // increment the row number to account for the first row with the suspect names
-					
+
 					column = suspectsList.indexOf( rCollections[i].getRelationshipControllers()[j].recipient );
 					column++; // increment the column number to account for the first column with the suspect names
-					
+
 					// to place the relationsip in the upper right triangle of the grid (and not in the lower left triangle), the column number must be higher than the row
 					// if this is not currently the case then the row and column should be swapped
 					if (row > column) {
@@ -340,10 +321,10 @@ var gameController = (function() {
 						column = row;
 						row = temp;
 					}
-					
+
 					jQueryLocatorPhrase = '#suspects > tbody > tr:eq(' + row + ') > td:eq(' + column + ')';
-					
-					// in the appropriate cell we are going to make a nested table if it doesn't already exist, so that if there is more than one relationship between the 2 parties, 
+
+					// in the appropriate cell we are going to make a nested table if it doesn't already exist, so that if there is more than one relationship between the 2 parties,
 					// we can add each relationship in the nested table, one row per relationship
 					if ( $(jQueryLocatorPhrase + ' > table').length == 0 ) {
 						// put a new table with one row and one column inside the aforementioned appropriate cell
@@ -355,36 +336,35 @@ var gameController = (function() {
 						jQueryLocatorPhrase += ' > table > tbody';
 						// ...and add a new row with a single column inside the nested table
 						$(jQueryLocatorPhrase).append( $('<tr><td></td></tr>') );
-						
+
 						// finally update the jQueryLocatorPhrase to point to the new cell in the nested table
 						position = $(jQueryLocatorPhrase).children('tr').length - 1;
 						jQueryLocatorPhrase += ' > tr:eq(' + position + ')';
 						position = $(jQueryLocatorPhrase).children('td').length - 1;
 						jQueryLocatorPhrase += ' > td:eq(' + position + ')';
 					}
-					
+
 					//the Relationship can remember the jQueryLocatorPhrase for later access
 					rCollections[i].getRelationshipControllers()[j].jQueryLocatorPhrase(jQueryLocatorPhrase);
-					
+
 					// depending on the Relationship's visibility, display it or not
 					rCollections[i].getRelationshipControllers()[j].updateVisibilityDisplay();
-					
+
 					// put the description of the relationship in the newly created, appropriate cell
 					$(jQueryLocatorPhrase).text( rCollections[i].getRelationshipControllers()[j].instigator.name + ' ' + rCollections[i].getRelationshipType().phrase + ' ' + rCollections[i].getRelationshipControllers()[j].recipient.name );
 					$(jQueryLocatorPhrase).addClass( rCollections[i].getRelationshipType().name );
-					
+
 				} // end for loop thru relationships
 			} // end for loop thru rCollections
 		}, // end populateGameBoard
-		
-		
+
 		/**
 		* When one of the Suspect names is clicked, it is representing questioning that suspect. A Relationship that the Suspect is involved in might be shown. This method handles all that
 		* @method questionSuspect
 		* @param {Object} evt The objct that was clicked to trigger calling this method
 		*/
-		questionSuspect : function(evt) {   
-			var clickedElement = $(evt.target);	
+		questionSuspect : function(evt) {
+			var clickedElement = $(evt.target);
 	    	var suspectid;
 	    	var suspectPositionInRelationship;
 	    	var positionSought;
@@ -393,11 +373,11 @@ var gameController = (function() {
 	    	var j;
 	    	var randomRelationship = [];
 	    	var relationshipToReveal;
-	    	
-	    	// TODO make 'instigator' and 'recipient' into constants 
+
+	    	// TODO make 'instigator' and 'recipient' into constants
 	    	// have we clicked on the instigator header or the recipient header?
 	    	if ( $(clickedElement).attr('data-instigatorid') ) {
-	    		suspectid = Number( $(clickedElement).attr('data-instigatorid') );	
+	    		suspectid = Number( $(clickedElement).attr('data-instigatorid') );
 	    		positionSought = 'instigator';
 	    	} else if ( $(clickedElement).attr('data-recipientid') ) {
 	    		suspectid = Number( $(clickedElement).attr('data-recipientid') );
@@ -405,7 +385,7 @@ var gameController = (function() {
 	    	} else {
 	    		throw 'Could not find attribute: neither the data-instigatorid nor the data-recipientid exists';
 	    	}
-	    	
+
 	    	//find all the Relationships with the Suspect in the particular position within the relationship (recipient or instigator, given by positionSought)
 	    	for(i in rCollections) {
 				for (j in rCollections[i].getRelationshipControllers()) {
@@ -426,27 +406,27 @@ var gameController = (function() {
 					relationshipToReveal.makeVisible(_visObject, additionalColorboxFormatting);
 				} else {
 					$.colorbox({
-						html: '<p>Suspect ' + suspectsList[suspectid].name + ' is evading the question</p>', 
+						html: '<p>Suspect ' + suspectsList[suspectid].name + ' is evading the question</p>',
 						closeButton: false
 					}).postJQueryCallback( additionalColorboxFormatting, 'evading' );
 				}
 			} else {
 				$.colorbox({
 					html: '<p> Suspect ' + suspectsList[suspectid].name + ' has no relationships to reveal</p>',
-					closeButton: false 
+					closeButton: false
 				}).postJQueryCallback( additionalColorboxFormatting, 'noneToReveal' );
 			}
 		}, // end questionSuspect
-		
-		
+
 		/**
+		**** This is not being used currently ****
 		* When one of the cells for the Relationships is clicked a Relationship that involves the 2 Suspects given by the grid location might be shown.
-		* This is not being used currently
+		*
 		* @method questionRelationship
 		* @param {Object} evt The objct that was clicked to trigger calling this method
 		*/
-		questionRelationship : function(evt) {   
-			var clickedElement = $(evt.target);	
+		questionRelationship : function(evt) {
+			var clickedElement = $(evt.target);
 	    	var instigatorId = $(clickedElement).attr('data-instigatorid');
 	    	var recipientId = $(clickedElement).attr('data-recipientid');
 	    	var i;
@@ -455,7 +435,7 @@ var gameController = (function() {
 	    	var instigatorsPossibleRelationships = [];
 	    	var recipientsPossibleRelationships = [];
 	    	var allPossibleRelationships = [];
-	  
+
 	  		// user clikced on a cell representing a relationship with a particular Suspect as instigator and a particular Suspect as recipient
 	  		// so look for all the relationships with that pairing
 	  		instigatorsPossibleRelationships = suspectCollection.findRelationshipsForSuspect( suspectsList[instigatorId] );
@@ -464,22 +444,22 @@ var gameController = (function() {
 	  				allPossibleRelationships.push( instigatorsPossibleRelationships[i] );
 	  			}
 	  		}
-	  		
+
 	  		recipientsPossibleRelationships = suspectCollection.findRelationshipsForSuspect( suspectsList[recipientId] );
 	  		for (i in recipientsPossibleRelationships) {
 	  			if ( (recipientsPossibleRelationships[i].recipient == suspectsList[recipientId]) && (recipientsPossibleRelationships[i].instigator == suspectsList[instigatorId]) ) {
 	  				allPossibleRelationships.push( recipientsPossibleRelationships[i] );
 	  			}
 	  		}
-	  		
+
 	    	if (allPossibleRelationships.length > 0) {
 	    		randomRelationship = getRandomIndex(allPossibleRelationships);
 	    		if ( allPossibleRelationships[randomRelationship].relationshipType.revealRelationshipUnderQuestioning() ) {
 	    			allPossibleRelationships[randomRelationship].makeVisible(_visObject, additionalColorboxFormatting);
 	    		} else {
 					$.colorbox({
-						html: '<p class="evading">Suspect ' + suspectsList[instigatorId].name + ' is evading the question</p>', 
-						closeButton: false 
+						html: '<p class="evading">Suspect ' + suspectsList[instigatorId].name + ' is evading the question</p>',
+						closeButton: false
 					}).postJQueryCallback( additionalColorboxFormatting );
 				}
 			} else {
@@ -490,7 +470,6 @@ var gameController = (function() {
 			}
 		}, // end questionRelationship
 
-		
 	} //end return object from gameController
 })();
 
@@ -500,30 +479,28 @@ $(document).ready(function() {
 	var i;
 	var j;
 	var murderer;
-	
+
 	//initialize the game and gameboard
 	suspectCollection = gameController.init();
 	gameController.createGameBoard();
 	gameController.populateGameBoard();
-	
-	
+
 	/*
 	* clickable buttons start here
 	*/
-	
+
 	// reset the game
 	$('#resetGameBtn').click( function() {
 		suspectCollection = gameController.init();
 		gameController.clearGameBoard();
 		gameController.createGameBoard();
-		
+
 		// re-register this click listener, since the suspect buttons have been re-created
-		$('.clickableHeader').click( gameController.questionSuspect );	
-		
+		$('.clickableHeader').click( gameController.questionSuspect );
+
 		gameController.populateGameBoard();
     });
-    
-	
+
 	// unhide all the relationships
 	$('#showAllBtn').click( function() {
 		rCollections = suspectCollection.getRelationshipCollections();
@@ -533,19 +510,16 @@ $(document).ready(function() {
 			}
 		}
     });
-    
-    
+
     // highlight the murderer
 	$('#showMurdererBtn').click( function() {
 		murderer = suspectCollection.getMurderer();
 		$( murderer.headerLocatorPhrase() ).addClass('murderer');
     });
-    
-    
+
     // when one of the Suspect names is clicked, it is representing questioning that suspect. A Relationship that the Suspect is involved in might be shown
-    $('.clickableHeader').click( gameController.questionSuspect );	
-    
+    $('.clickableHeader').click( gameController.questionSuspect );
+
     // was going to have the grid with the Relationships clickable, but decided against it, for now
     //$('.unknownRelationship').click( gameController.questionRelationship );
-	
 });
