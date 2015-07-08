@@ -256,31 +256,26 @@ function RelationshipView() {
 		* @param callback A function to run on .colorbox after the other makeVisible stuff is done. (Colorbox is the javascript library that displays the pop-up dialog boxes)
 		*/
 		makeVisible : function (instigator, recipient, rType, visObject, callback) {
-			if (_jQueryLocatorPhrase) {
-				$(_jQueryLocatorPhrase).removeClass('invisible');
-				$(_jQueryLocatorPhrase).addClass('visible');
-				$(_jQueryLocatorPhrase).show(1000);
-				_visible = true;
+			$(_jQueryLocatorPhrase).removeClass('invisible');
+			$(_jQueryLocatorPhrase).addClass('visible');
+			$(_jQueryLocatorPhrase).show(1000);
+			_visible = true;
 
-				//configure the popUpDialog
-				$('#popUpDialogImage1').html('<img class="suspectimg" src="' + instigator.img + '" width="300px">');
-				$('#popUpDialogImage2').html('<img class="suspectimg" src="' + recipient.img + '" width="300px">');
-				$('#popUpDialogText').html('<p>' + instigator.name + rType.phrase + recipient.name + '</p>');
-				$('#relationshipdisplay > table').removeClass();
-				$('#relationshipdisplay > table').addClass(rType.name);
+			//configure the popUpDialog
+			$('#popUpDialogImage1').html('<img class="suspectimg" src="' + instigator.img + '" width="300px">');
+			$('#popUpDialogImage2').html('<img class="suspectimg" src="' + recipient.img + '" width="300px">');
+			$('#popUpDialogText').html('<p>' + instigator.name + rType.phrase + recipient.name + '</p>');
+			$('#relationshipdisplay > table').removeClass();
+			$('#relationshipdisplay > table').addClass(rType.name);
 
-				// now display the popUpDialog using colorbox
-				$.colorbox({
-					html: $('#relationshipdisplay').html(),
-					width: '650px',
-					height: '400px',
-					speed: 200,
-					closeButton: false
-				}).postJQueryCallback( callback );
-
-			} else {
-				throw 'RelationshipView.makeVisible(): missing jQueryLocatorPhrase';
-			}
+			// now display the popUpDialog using colorbox
+			$.colorbox({
+				html: $('#relationshipdisplay').html(),
+				width: '650px',
+				height: '400px',
+				speed: 200,
+				closeButton: false
+			}).postJQueryCallback( callback );
 
 			if (MMVars.showVisDiagram) {
 				// add new nodes, if needed, for the recipient and instigator, colored the same as the background color of the header row
@@ -333,14 +328,10 @@ function RelationshipView() {
 		* @method makeInvisible
 		*/
 		makeInvisible : function () {
-			if (_jQueryLocatorPhrase) {
-				$(_jQueryLocatorPhrase).removeClass('visible');
-				$(_jQueryLocatorPhrase).addClass('invisible');
-				$(_jQueryLocatorPhrase).hide(250);
-				_visible = false;
-			} else {
-				throw 'RelationshipView.makeInvisible(): missing jQueryLocatorPhrase';
-			}
+			$(_jQueryLocatorPhrase).removeClass('visible');
+			$(_jQueryLocatorPhrase).addClass('invisible');
+			$(_jQueryLocatorPhrase).hide(250);
+			_visible = false;
 		}
 	}
 }
